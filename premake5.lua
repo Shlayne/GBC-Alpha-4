@@ -2,7 +2,7 @@ include "Dependencies/premake/Custom/solutionitems.lua"
 
 workspace "GBC-1.4"
 	architecture "x86_64"
-	startproject "GBC-1.4"
+	startproject "Editor"
 
 	configurations { "Profile", "Debug", "Release", "Dist" }
 
@@ -38,3 +38,4 @@ include "Dependencies/Dependencies.lua"
 
 -- Add any projects here with 'include "__PROJECT_NAME__"'
 include "GBC-1.4"
+include "Editor"

@@ -1,5 +1,5 @@
-project "GBC-1.4"
-	kind "StaticLib"
+project "Editor"
+	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++20"
 	cdialect "C17"
@@ -19,7 +19,7 @@ project "GBC-1.4"
 	includedirs {
 		-- Add any project source directories here.
 		"src",
-		-- "%{wks.location}/__PROJECT_NAME__/src",
+		"%{wks.location}/GBC-1.4/src",
 
 		-- Add any dependency includes here.
 		-- "%{IncludeDir.__PROJECT_NAME__}",
@@ -27,7 +27,7 @@ project "GBC-1.4"
 	
 	-- Add any links dependency libs via their project names here.
 	links {
-		--	"__PROJECT_NAME__"
+		"GBC-1.4"
 	}
 
 	filter "system:windows"
@@ -58,6 +58,7 @@ project "GBC-1.4"
 		defines "GBC_CONFIG_RELEASE"
 
 	filter "configurations:Dist"
+		kind "WindowedApp"
 		runtime "Release"
 		optimize "Full"
 		symbols "Off"
