@@ -22,7 +22,7 @@ project "Editor"
 		"%{wks.location}/GBC-1.4/src",
 
 		-- Add any dependency includes here.
-		-- "%{IncludeDir.__PROJECT_NAME__}",
+		"%{IncludeDir.spdlog}",
 	}
 	
 	-- Add any links dependency libs via their project names here.

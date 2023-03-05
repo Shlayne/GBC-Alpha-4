@@ -1,14 +1,15 @@
 #include "GBC/Core/Application.h"
+#include "GBC/Core/Logger.h"
 
 namespace gbc
 {
-	extern Application* CreateApplication(ApplicationCommandLineArgs args);
+	extern auto CreateApplication(ApplicationCommandLineArgs args) -> Application*;
 
-	int Main(int argc, char** argv)
+	auto Main(int argc, char** argv) -> int
 	{
-		static_cast<void>(argc, argv);
+		Logger::Create();
 
-		Application* application = CreateApplication({ argc, argv });
+		Application* application = CreateApplication({argc, argv});
 		application->Run();
 		delete application;
 
@@ -22,7 +23,7 @@ namespace gbc
 
 #include <Windows.h>
 
-int APIENTRY WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hInstPrev, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
+auto APIENTRY WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hInstPrev, _In_ LPSTR lpCmdLine, _In_ int nCmdShow) -> int
 {
 	static_cast<void>(hInst, hInstPrev, lpCmdLine, nCmdShow);
 	return gbc::Main(__argc, __argv);
@@ -30,7 +31,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hInstPrev, _In_ LP
 
 #else // !GBC_CONFIG_DIST
 
-int main(int argc, char** argv)
+auto main(int argc, char** argv) -> int
 {
 	return gbc::Main(argc, argv);
 }

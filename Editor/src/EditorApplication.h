@@ -10,7 +10,7 @@ namespace gbc
 		EditorApplication(ApplicationCommandLineArgs args);
 	};
 
-	Application* CreateApplication(ApplicationCommandLineArgs args)
+	auto CreateApplication(ApplicationCommandLineArgs args) -> Application*
 	{
 		return new EditorApplication(args);
 	}

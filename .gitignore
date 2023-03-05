@@ -8,3 +8,6 @@
 # Output Binaries
 bin/**
 bin-int/**
+
+# GBC
+GBC.log

@@ -6,9 +6,10 @@ namespace gbc
 		: m_Count{argc}
 		, m_Args{argv}
 	{
+
 	}
 
-	char* ApplicationCommandLineArgs::operator[](size_t index) noexcept
+	auto ApplicationCommandLineArgs::operator[](size_t index) noexcept -> char*
 	{
 		return m_Args[index];
 	}
@@ -27,17 +28,17 @@ namespace gbc
 
 	}
 
-	Application& Application::Get()
+	auto Application::Get() -> Application&
 	{
 		return *s_ApplicationInstance;
 	}
 
-	ApplicationCommandLineArgs Application::GetCommandLineArgs()
+	auto Application::GetCommandLineArgs() -> ApplicationCommandLineArgs
 	{
 		return m_CommandLineArgs;
 	}
 
-	void Application::Run()
+	auto Application::Run() -> void
 	{
 		while (true)
 		{

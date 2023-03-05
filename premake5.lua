@@ -36,6 +36,11 @@ OutputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 include "Dependencies/premake/Custom/notyetimplemented.lua"
 include "Dependencies/Dependencies.lua"
 
--- Add any projects here with 'include "__PROJECT_NAME__"'
+group "GBC-1.4"
+
+group "Editor"
+
+group ""
+
 include "GBC-1.4"
 include "Editor"

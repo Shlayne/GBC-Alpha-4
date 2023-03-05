@@ -10,7 +10,7 @@ namespace gbc
 		ApplicationCommandLineArgs() noexcept = default;
 		ApplicationCommandLineArgs(int argc, char** argv);
 	public:
-		char* operator[](size_t index) noexcept;
+		auto operator[](size_t index) noexcept -> char*;
 	private:
 		int m_Count{0};
 		char** m_Args{nullptr};
@@ -22,13 +22,13 @@ namespace gbc
 		Application(ApplicationCommandLineArgs args);
 		virtual ~Application();
 	public:
-		static Application& Get();
+		static auto Get() -> Application&;
 	public:
-		ApplicationCommandLineArgs GetCommandLineArgs();
+		auto GetCommandLineArgs() -> ApplicationCommandLineArgs;
 	private:
 		ApplicationCommandLineArgs m_CommandLineArgs;
 	private:
-		friend int Main(int argc, char** argv);
-		void Run();
+		friend auto Main(int argc, char** argv) -> int;
+		auto Run() -> void;
 	};
 }
