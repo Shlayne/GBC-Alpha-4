@@ -1,8 +1,8 @@
 include "Dependencies/premake/Custom/solutionitems.lua"
 
-workspace "__WORKSPACE_NAME__"
+workspace "GBC-1.4"
 	architecture "x86_64"
-	startproject "__PROJECT_NAME__"
+	startproject "GBC-1.4"
 
 	configurations { "Profile", "Debug", "Release", "Dist" }
 
@@ -37,4 +37,4 @@ include "Dependencies/premake/Custom/notyetimplemented.lua"
 include "Dependencies/Dependencies.lua"
 
 -- Add any projects here with 'include "__PROJECT_NAME__"'
-include "__PROJECT_NAME__"
+include "GBC-1.4"

@@ -1,4 +1,4 @@
-project "__PROJECT_NAME__"
+project "GBC-1.4"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++20"
