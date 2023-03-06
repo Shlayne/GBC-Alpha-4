@@ -62,3 +62,6 @@ project "GBC-1.4"
 		optimize "Full"
 		symbols "Off"
 		defines "GBC_CONFIG_DIST"
+
+		-- These only have debug logging
+		excludes "src/GBC/Event/*.cpp"

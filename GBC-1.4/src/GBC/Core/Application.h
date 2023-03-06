@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GBC/Core/Core.h"
+#include "GBC/Event/Events.h"
 
 namespace gbc
 {
@@ -25,6 +26,8 @@ namespace gbc
 		static auto Get() -> Application&;
 	public:
 		auto GetCommandLineArgs() -> ApplicationCommandLineArgs;
+	private:
+		auto OnWindowCloseEvent(WindowCloseEvent& event) -> void;
 	private:
 		ApplicationCommandLineArgs m_CommandLineArgs;
 	private:

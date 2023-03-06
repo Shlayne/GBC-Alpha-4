@@ -38,6 +38,11 @@ namespace gbc
 		return m_CommandLineArgs;
 	}
 
+	auto Application::OnWindowCloseEvent(WindowCloseEvent& event) -> void
+	{
+
+	}
+
 	auto Application::Run() -> void
 	{
 		while (true)
