@@ -1,4 +1,4 @@
-#include "GBC/Core/Core.h"
+#include "gbcpch.h"
 #if GBC_ENABLE_LOGGING
 #include "WindowEvents.h"
 

@@ -1,3 +1,4 @@
+#include "gbcpch.h"
 #include "Application.h"
 
 namespace gbc

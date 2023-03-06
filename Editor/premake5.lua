@@ -32,12 +32,9 @@ project "Editor"
 
 	filter "system:windows"
 		systemversion "latest"
-		usestdpreproc "On"
+		usestdpreproc "On" -- msvc doesn't provide __VA_OPT__ by default; this fixes that.
 		buildoptions "/wd5105" -- Until Microsoft updates Windows 10 to not have terrible code (aka never), this must be here to prevent a warning.
 		defines "GBC_SYSTEM_WINDOWS"
-
-		-- msvc doesn't provide __VA_OPT__ by default; this fixes that.
-		usestdpreproc "On"
 
 	filter "configurations:Profile"
 		runtime "Debug"

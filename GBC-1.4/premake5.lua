@@ -8,6 +8,9 @@ project "GBC-1.4"
 	targetdir ("%{wks.location}/bin/" .. OutputDir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. OutputDir .. "/%{prj.name}")
 
+	pchheader "gbcpch.h"
+	pchsource "src/gbcpch.cpp"
+
 	files {
 		"src/**.h",
 		"src/**.c",

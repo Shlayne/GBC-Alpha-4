@@ -14,7 +14,7 @@ namespace gbc
 	}
 
 	template<typename T>
-	auto DestroyRef(Ref<T>& ref)
+	auto DestroyRef(Ref<T>& ref) noexcept -> void
 	{
 		ref.reset();
 	}
