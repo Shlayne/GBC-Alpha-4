@@ -3,9 +3,8 @@ LibraryDir = {}
 Library = {}
 
 -- Include Directories
---	IncludeDir["__PROJECT_NAME__"] = "%{__PROJECT_DIR_NAME__}/__PROJECT_INCLUDE_PATH__"
-
 	-- Header and Source; they have their own project.
+	IncludeDir["glfw"] = "%{wks.location}/GBC-1.4/Dependencies/glfw-3.3.8/include"
 	IncludeDir["spdlog"] = "%{wks.location}/GBC-1.4/Dependencies/spdlog-1.11.0/include"
 
 	-- Header-Only; they don't have their own project.

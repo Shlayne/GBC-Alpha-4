@@ -25,6 +25,7 @@ project "GBC-1.4"
 		-- "%{wks.location}/__PROJECT_NAME__/src",
 
 		-- Add any dependency includes here.
+		"%{IncludeDir.glfw}",
 		"%{IncludeDir.spdlog}",
 	}
 	
@@ -35,12 +36,13 @@ project "GBC-1.4"
 
 	filter "system:windows"
 		systemversion "latest"
-		usestdpreproc "On"
+		usestdpreproc "On" -- msvc doesn't provide __VA_OPT__ by default; this fixes that.
 		buildoptions "/wd5105" -- Until Microsoft updates Windows 10 to not have terrible code (aka never), this must be here to prevent a warning.
 		defines "GBC_SYSTEM_WINDOWS"
 
-		-- msvc doesn't provide __VA_OPT__ by default; this fixes that.
-		usestdpreproc "On"
+		links {
+			"glfw"
+		}
 
 	filter "configurations:Profile"
 		runtime "Debug"
@@ -68,3 +70,6 @@ project "GBC-1.4"
 
 		-- These only have debug logging
 		excludes "src/GBC/Event/*.cpp"
+
+	filter "system:not windows"
+		excludes "Platform/System/Windows/**"

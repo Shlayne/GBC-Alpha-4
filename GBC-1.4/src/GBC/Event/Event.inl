@@ -22,34 +22,34 @@ namespace gbc
 	{
 		m_Handled = true;
 	}
-
+	
 	template<typename... Args>
-	auto Event::Dispatch(auto(*callback)(Event&, Args...) -> void, Args&&... args)
+	auto Event::Dispatch(auto(*callback)(Event&, Args...) -> void, auto&&... args) -> void
 	{
 		if (!m_Handled)
 			callback(*this, std::forward<Args>(args)...);
 	}
-
-	template<typename C, typename... Args>
-	auto Event::Dispatch(C* object, auto(C::*callback)(Event&, Args...) -> void, Args&&... args)
+	
+	template<typename Class, typename... Args>
+	auto Event::Dispatch(Class* object, auto(Class::*callback)(Event&, Args...) -> void, auto&&... args) -> void
 	{
 		if (!m_Handled)
 			(object->*callback)(*this, std::forward<Args>(args)...);
 	}
-
-	template<typename E, typename... Args>
-	requires(std::is_base_of_v<Event, E>)
-	auto Event::Dispatch(auto(*callback)(E&, Args...) -> void, Args&&... args)
+	
+	template<typename EventSubclass, typename... Args>
+	requires(std::is_base_of_v<Event, EventSubclass>)
+	auto Event::Dispatch(auto(*callback)(EventSubclass&, Args...) -> void, auto&&... args) -> void
 	{
-		if (!m_Handled && m_Type == E::GetStaticType())
-			callback(static_cast<E&>(*this), std::forward<Args>(args)...);
+		if (!m_Handled && m_Type == EventSubclass::GetStaticType())
+			callback(static_cast<EventSubclass&>(*this), std::forward<Args>(args)...);
 	}
-
-	template<typename C, typename E, typename... Args>
-	requires(std::is_base_of_v<Event, E>)
-	auto Event::Dispatch(C* object, auto(C::*callback)(E&, Args...) -> void, Args&&... args)
+	
+	template<typename Class, typename EventSubclass, typename... Args>
+	requires(std::is_base_of_v<Event, EventSubclass>)
+	auto Event::Dispatch(Class* object, auto(Class::*callback)(EventSubclass&, Args...) -> void, auto&&... args) -> void
 	{
-		if (!m_Handled && m_Type == E::GetStaticType())
-			(object->*callback)(static_cast<E&>(*this), std::forward<Args>(args)...);
+		if (!m_Handled && m_Type == EventSubclass::GetStaticType())
+			(object->*callback)(static_cast<EventSubclass&>(*this), std::forward<Args>(args)...);
 	}
 }

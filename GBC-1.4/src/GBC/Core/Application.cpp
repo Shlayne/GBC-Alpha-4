@@ -10,17 +10,17 @@ namespace gbc
 
 	}
 
-	auto ApplicationCommandLineArgs::operator[](size_t index) noexcept -> char*
+	auto ApplicationCommandLineArgs::operator[](size_t index) const noexcept -> const char*
 	{
 		return m_Args[index];
 	}
 
 	Application* s_ApplicationInstance = nullptr;
 
-	Application::Application(ApplicationCommandLineArgs args)
-		: m_CommandLineArgs{args}
+	Application::Application(const ApplicationInfo& info)
+		: m_CommandLineArgs{info.args}
 	{
-		// TODO: assert s_ApplicationInstance is nullptr
+		GBC_CORE_ASSERT(!s_ApplicationInstance, "Tried to recreate Application.");
 		s_ApplicationInstance = this;
 	}
 
@@ -34,21 +34,38 @@ namespace gbc
 		return *s_ApplicationInstance;
 	}
 
-	auto Application::GetCommandLineArgs() -> ApplicationCommandLineArgs
+	auto Application::GetWindow(size_t index) -> Window&
 	{
-		return m_CommandLineArgs;
+		GBC_CORE_ASSERT(index < m_Windows.size(), "Tried to get a non-existent window.");
+		return *m_Windows[index];
 	}
 
-	auto Application::OnWindowCloseEvent(WindowCloseEvent& event) -> void
+	auto Application::OpenWindow(const WindowInfo& info) -> Window&
+	{
+		Window& window = *m_Windows.emplace_back(Window::CreateScope(info));
+		window.SetEventCallback(GBC_BIND_FUNC(OnEvent));
+		return window;
+	}
+
+	auto Application::OnEvent(Event& event, Window* window) -> void
+	{
+		event.Dispatch(this, &Application::OnWindowCloseEvent, window);
+	}
+
+	auto Application::OnWindowCloseEvent(WindowCloseEvent& event, Window* window) -> void
 	{
 
 	}
 
 	auto Application::Run() -> void
 	{
-		while (true)
-		{
+		GBC_CORE_ASSERT(!m_Running, "Tried to rerun the Application.");
+		m_Running = true;
 
+		while (m_Running)
+		{
+			for (auto& window : m_Windows)
+				window->SwapBuffers();
 		}
 	}
 }

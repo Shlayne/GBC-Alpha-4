@@ -7,11 +7,6 @@ namespace gbc
 	class EditorApplication : public Application
 	{
 	public:
-		EditorApplication(ApplicationCommandLineArgs args);
+		EditorApplication(ApplicationInfo applicationInfo);
 	};
-
-	auto CreateApplication(ApplicationCommandLineArgs args) -> Application*
-	{
-		return new EditorApplication(args);
-	}
 }

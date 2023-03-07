@@ -2,6 +2,7 @@
 
 #include "GBC/Core/Core.h"
 #include <functional>
+#include <concepts>
 
 namespace gbc
 {
@@ -30,18 +31,18 @@ namespace gbc
 #endif
 	public:
 		template<typename... Args>
-		auto Dispatch(auto(*callback)(Event&, Args...) -> void, Args&&... args);
+		auto Dispatch(auto(*callback)(Event&, Args...) -> void, auto&&... args) -> void;
 
-		template<typename C, typename... Args>
-		auto Dispatch(C* object, auto(C::*callback)(Event&, Args...) -> void, Args&&... args);
+		template<typename Class, typename... Args>
+		auto Dispatch(Class* object, auto(Class::*callback)(Event&, Args...) -> void, auto&&... args) -> void;
+		
+		template<typename EventSubclass, typename... Args>
+		requires(std::is_base_of_v<Event, EventSubclass>)
+		auto Dispatch(auto(*callback)(EventSubclass&, Args...) -> void, auto&&... args) -> void;
 
-		template<typename E, typename... Args>
-		requires(std::is_base_of_v<Event, E>)
-		auto Dispatch(auto(*callback)(E&, Args...) -> void, Args&&... args);
-
-		template<typename C, typename E, typename... Args>
-		requires(std::is_base_of_v<Event, E>)
-		auto Dispatch(C* object, auto(C::*callback)(E&, Args...) -> void, Args&&... args);
+		template<typename Class, typename EventSubclass, typename... Args>
+		requires(std::is_base_of_v<Event, EventSubclass>)
+		auto Dispatch(Class* object, auto(Class::*callback)(EventSubclass&, Args...) -> void, auto&&... args) -> void;
 	private:
 		EventType m_Type : 7 {EventType::None};
 		bool m_Handled : 1 {false};
@@ -53,9 +54,6 @@ namespace gbc
 		return ostream << event.ToString();
 	}
 #endif
-
-	class Window;
-	using EventCallback = std::function<void(Event&, Window&)>;
 }
 
 #include "Event.inl"
