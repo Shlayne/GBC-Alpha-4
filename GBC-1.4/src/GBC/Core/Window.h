@@ -26,7 +26,7 @@ namespace gbc
 	public:
 		virtual auto SetEventCallback(const EventCallback& callback) -> EventCallback = 0;
 		virtual auto SwapBuffers() -> void = 0;
-		virtual auto ShouldClose() const -> bool = 0;
+		virtual auto PollEvents() -> void = 0; // TODO: move poll events to its own file.
 		virtual auto Close() -> void = 0;
 	public:
 		virtual auto SetTitle(std::string_view title) -> void = 0;

@@ -41,7 +41,8 @@ project "GBC-1.4"
 		defines "GBC_SYSTEM_WINDOWS"
 
 		links {
-			"glfw"
+			"glfw",
+			"opengl32.lib"
 		}
 
 	filter "configurations:Profile"

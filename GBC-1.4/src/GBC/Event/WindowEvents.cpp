@@ -54,8 +54,8 @@ namespace gbc
 	std::string WindowPathDropEvent::ToString() const
 	{
 		std::stringstream stream;
-		stream << "WindowDropEvent: pathCount=" << m_PathCount << " paths:";
-		for (uint32_t i = 0; i < m_PathCount; i++)
+		stream << "WindowPathDropEvent: pathCount=" << m_PathCount << " paths:";
+		for (uint32_t i{0}; i < m_PathCount; ++i)
 			stream << " \"" << m_Paths[i] << '"';
 		return stream.str();
 	}
@@ -69,7 +69,7 @@ namespace gbc
 
 	std::string WindowRefreshEvent::ToString() const
 	{
-		return "WindowContentScaleEvent";
+		return "WindowRefreshEvent";
 	}
 }
 

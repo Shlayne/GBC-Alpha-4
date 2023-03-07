@@ -7,14 +7,14 @@ namespace gbc
 	std::string MouseButtonPressEvent::ToString() const
 	{
 		std::stringstream stream;
-		stream << "MouseButtonPressEvent: button=" << static_cast<uint16_t>(m_Button) << " modifiers=" << m_Modifiers;
+		stream << "MouseButtonPressEvent: button=" << static_cast<uint16_t>(m_Button) << " modifiers=" << +m_Modifiers;
 		return stream.str();
 	}
 
 	std::string MouseButtonReleaseEvent::ToString() const
 	{
 		std::stringstream stream;
-		stream << "MouseButtonReleaseEvent: button=" << static_cast<uint16_t>(m_Button) << " modifiers=" << m_Modifiers;
+		stream << "MouseButtonReleaseEvent: button=" << static_cast<uint16_t>(m_Button) << " modifiers=" << +m_Modifiers;
 		return stream.str();
 	}
 

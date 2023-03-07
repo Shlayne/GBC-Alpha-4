@@ -2,13 +2,15 @@
 
 #include <cstdint>
 
+// Taken from glfw3.h and modified
+
 namespace gbc
 {
 	enum Modifiers_ : uint8_t
 	{
 		Modifiers_None     = 0,
-		Modifiers_Control  = 1 << 0,
-		Modifiers_Shift    = 1 << 1,
+		Modifiers_Shift    = 1 << 0,
+		Modifiers_Control  = 1 << 1,
 		Modifiers_Alt      = 1 << 2,
 		Modifiers_Super    = 1 << 3,
 		Modifiers_CapsLock = 1 << 4,

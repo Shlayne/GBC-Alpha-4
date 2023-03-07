@@ -11,7 +11,7 @@
 		{ \
 			if (!(condition)) \
 			{ \
-				GBC##type##ERROR(#which " ({0}) failed at {1}:{2}", (condition), __FILE__, __LINE__); \
+				GBC##type##ERROR(#which " (" #condition ") failed at {}:{}", __FILE__, __LINE__); \
 				GBC##type##ERROR(message __VA_OPT__(,) __VA_ARGS__); \
 				GBC_DEBUG_BREAK(); \
 			} \

@@ -14,10 +14,11 @@ namespace gbc
 		OpenWindow(windowInfo);
 	}
 
-	auto CreateApplication(ApplicationCommandLineArgs args) -> Application*
+	auto CreateApplication(ApplicationCommandLineArgs commandLineArgs) -> Application*
 	{
 		ApplicationInfo applicationInfo;
-		applicationInfo.args = args;
+		applicationInfo.commandLineArgs = commandLineArgs;
+		applicationInfo.closeOnLastWindowClosed = true;
 		return new EditorApplication{applicationInfo};
 	}
 }

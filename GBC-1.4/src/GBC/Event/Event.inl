@@ -2,8 +2,9 @@
 
 namespace gbc
 {
-	constexpr Event::Event(EventType type) noexcept
+	constexpr Event::Event(EventType type, bool applicationOnly) noexcept
 		: m_Type{type}
+		, m_ApplicationOnly{applicationOnly}
 	{
 
 	}
@@ -21,6 +22,11 @@ namespace gbc
 	constexpr auto Event::Handle() noexcept -> void
 	{
 		m_Handled = true;
+	}
+
+	constexpr auto Event::IsApplicationOnly() const noexcept -> bool
+	{
+		return m_ApplicationOnly;
 	}
 	
 	template<typename... Args>

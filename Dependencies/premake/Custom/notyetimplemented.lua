@@ -33,7 +33,7 @@ p.override(m.elements, "clCompile", function(base, cfg)
 			m.element("UseStandardPreprocessor", nil, iif(cfg.usestdpreproc, "true", "false"))
 		end
 	end)
-	
+
 	table.insertafter(calls, m.scanSourceForModuleDependencies, function(cfg)
 		if _ACTION >= "vs2022" and cfg.enablemodules ~= nil then
 			m.element("EnableModules", nil, iif(cfg.enablemodules, "true", "false"))

@@ -2,7 +2,6 @@
 
 #include "GBC/Core/Core.h"
 #include <functional>
-#include <concepts>
 
 namespace gbc
 {
@@ -11,7 +10,7 @@ namespace gbc
 		None = 0,
 		WindowClose, WindowResize, WindowMove, WindowFocus, WindowMinimize, WindowMaximize, 
 			WindowPathDrop, WindowFramebufferResize, WindowContentScale, WindowRefresh,
-		KeyPress, KeyRepeat, KeyRelease, KeyChar,
+		KeyPress, KeyRepeat, KeyRelease, KeyCharType,
 		MouseButtonPress, MouseButtonRelease, MouseMove, MouseScroll, MouseEnter,
 	};
 
@@ -20,7 +19,7 @@ namespace gbc
 	class Event
 	{
 	protected:
-		constexpr Event(EventType type) noexcept;
+		constexpr Event(EventType type, bool applicationOnly = false) noexcept;
 	public:
 		constexpr auto GetType() const noexcept -> EventType;
 		constexpr auto IsHandled() const noexcept -> bool;
@@ -44,8 +43,12 @@ namespace gbc
 		requires(std::is_base_of_v<Event, EventSubclass>)
 		auto Dispatch(Class* object, auto(Class::*callback)(EventSubclass&, Args...) -> void, auto&&... args) -> void;
 	private:
-		EventType m_Type : 7 {EventType::None};
+		friend class Application;
+		constexpr auto IsApplicationOnly() const noexcept -> bool;
+	private:
+		EventType m_Type : 5 {EventType::None};
 		bool m_Handled : 1 {false};
+		bool m_ApplicationOnly : 1 {false};
 	};
 
 #if GBC_ENABLE_LOGGING

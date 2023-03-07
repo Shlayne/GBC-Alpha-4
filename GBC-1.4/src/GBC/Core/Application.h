@@ -21,7 +21,8 @@ namespace gbc
 
 	struct ApplicationInfo
 	{
-		ApplicationCommandLineArgs args;
+		ApplicationCommandLineArgs commandLineArgs;
+		bool closeOnLastWindowClosed = true;
 	};
 
 	class Application
@@ -30,11 +31,12 @@ namespace gbc
 		Application(const ApplicationInfo& info);
 		virtual ~Application();
 	public:
+		inline auto Close() noexcept { m_Running = false; }
+	public:
 		static auto Get() -> Application&;
 		auto GetWindow(size_t index = 0) -> Window&;
 		auto OpenWindow(const WindowInfo& info) -> Window&;
-	public:
-		inline auto GetCommandLineArgs() -> ApplicationCommandLineArgs { return m_CommandLineArgs; }
+		inline auto GetCommandLineArgs() const noexcept -> ApplicationCommandLineArgs { return m_CommandLineArgs; }
 	private:
 		auto OnEvent(Event& event, Window* window) -> void;
 		auto OnWindowCloseEvent(WindowCloseEvent& event, Window* window) -> void;
@@ -43,7 +45,8 @@ namespace gbc
 		std::vector<Scope<Window>> m_Windows;
 
 		// Flags
-		bool m_Running : 1 {false};
+		bool m_Running : 1 {true};
+		bool m_CloseOnLastWindowClosed : 1 {false};
 	private:
 		friend auto Main(int argc, char** argv) -> int;
 		auto Run() -> void;

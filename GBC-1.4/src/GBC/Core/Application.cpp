@@ -18,7 +18,8 @@ namespace gbc
 	Application* s_ApplicationInstance = nullptr;
 
 	Application::Application(const ApplicationInfo& info)
-		: m_CommandLineArgs{info.args}
+		: m_CommandLineArgs{info.commandLineArgs}
+		, m_CloseOnLastWindowClosed{info.closeOnLastWindowClosed}
 	{
 		GBC_CORE_ASSERT(!s_ApplicationInstance, "Tried to recreate Application.");
 		s_ApplicationInstance = this;
@@ -26,7 +27,8 @@ namespace gbc
 
 	Application::~Application()
 	{
-
+		GBC_CORE_ASSERT(s_ApplicationInstance, "Tried to redestroy Application.");
+		s_ApplicationInstance = nullptr;
 	}
 
 	auto Application::Get() -> Application&
@@ -49,23 +51,32 @@ namespace gbc
 
 	auto Application::OnEvent(Event& event, Window* window) -> void
 	{
+		if (!event.IsApplicationOnly())
+		{
+			// TODO: dispatch to client
+		}
 		event.Dispatch(this, &Application::OnWindowCloseEvent, window);
 	}
 
 	auto Application::OnWindowCloseEvent(WindowCloseEvent& event, Window* window) -> void
 	{
+		GBC_CORE_ASSERT(window, "window == nullptr");
+		auto it = std::find_if(m_Windows.begin(), m_Windows.end(), [window](const Scope<Window>& w) -> bool { return w.get() == window; });
+		GBC_CORE_ASSERT(it != m_Windows.end(), "it == m_Windows.end()");
+		m_Windows.erase(it);
 
+		if (m_Windows.empty() && m_CloseOnLastWindowClosed)
+			Close();
 	}
 
 	auto Application::Run() -> void
 	{
-		GBC_CORE_ASSERT(!m_Running, "Tried to rerun the Application.");
-		m_Running = true;
-
 		while (m_Running)
 		{
 			for (auto& window : m_Windows)
 				window->SwapBuffers();
+			if (!m_Windows.empty()) // TODO: move poll events to its own file.
+				m_Windows.front()->PollEvents();
 		}
 	}
 }
