@@ -54,11 +54,9 @@ namespace gbc
 		}
 	}
 
-	auto WindowsWindow::SetEventCallback(const EventCallback& callback) -> EventCallback
+	auto WindowsWindow::SetEventCallback(const EventCallback& callback) -> void
 	{
-		EventCallback oldCallback = m_EventCallback;
 		m_EventCallback = callback;
-		return oldCallback;
 	}
 
 	auto WindowsWindow::SwapBuffers() -> void

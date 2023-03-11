@@ -49,11 +49,44 @@ namespace gbc
 		return window;
 	}
 
+	auto Application::PushLayer(Window& window, Layer* layer) -> void
+	{
+		LayerStack& layerStack{window.GetLayerStack()};
+		layerStack.PushLayer(layer);
+		layer->OnAttach();
+	}
+
+	auto Application::PopLayer(Window& window) -> Layer*
+	{
+		LayerStack& layerStack{window.GetLayerStack()};
+		Layer* layer{layerStack.PopLayer()};
+		layer->OnAttach();
+		return layer;
+	}
+
+	auto Application::PushOverlay(Window& window, Layer* overlay) -> void
+	{
+		LayerStack& layerStack{window.GetLayerStack()};
+		layerStack.PushOverlay(overlay);
+		overlay->OnAttach();
+	}
+
+	auto Application::PopOverlay(Window& window) -> Layer*
+	{
+		LayerStack& layerStack{window.GetLayerStack()};
+		Layer* overlay{layerStack.PopOverlay()};
+		overlay->OnAttach();
+		return overlay;
+	}
+
 	auto Application::OnEvent(Event& event, Window* window) -> void
 	{
 		if (!event.IsApplicationOnly())
 		{
-			// TODO: dispatch to client
+			GBC_CORE_ASSERT(window, "window == nullptr");
+			auto& layerStack = window->GetLayerStack();
+			for (auto it = layerStack.rbegin(); !event.IsHandled() && it != layerStack.rend(); ++it)
+				(*it)->OnEvent(event);
 		}
 		event.Dispatch(this, &Application::OnWindowCloseEvent, window);
 	}
@@ -73,6 +106,10 @@ namespace gbc
 	{
 		while (m_Running)
 		{
+			for (auto& window : m_Windows)
+				for (auto& layer : window->GetLayerStack())
+					layer->OnUpdate(0.0f); // TODO: timestep
+
 			for (auto& window : m_Windows)
 				window->SwapBuffers();
 			if (!m_Windows.empty()) // TODO: move poll events to its own file.

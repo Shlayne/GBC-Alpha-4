@@ -37,6 +37,11 @@ namespace gbc
 		auto GetWindow(size_t index = 0) -> Window&;
 		auto OpenWindow(const WindowInfo& info) -> Window&;
 		inline auto GetCommandLineArgs() const noexcept -> ApplicationCommandLineArgs { return m_CommandLineArgs; }
+	public:
+		auto PushLayer(Window& window, Layer* layer) -> void;
+		auto PopLayer(Window& window) -> Layer*;
+		auto PushOverlay(Window& window, Layer* overlay) -> void;
+		auto PopOverlay(Window& window) -> Layer*;
 	private:
 		auto OnEvent(Event& event, Window* window) -> void;
 		auto OnWindowCloseEvent(WindowCloseEvent& event, Window* window) -> void;

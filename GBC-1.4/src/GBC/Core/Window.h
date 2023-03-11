@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GBC/Event/Event.h"
+#include "GBC/Core/LayerStack.h"
 #include <functional>
 
 namespace gbc
@@ -24,7 +25,8 @@ namespace gbc
 		static Scope<Window> CreateScope(const WindowInfo& info = {});
 		virtual ~Window() = default;
 	public:
-		virtual auto SetEventCallback(const EventCallback& callback) -> EventCallback = 0;
+		virtual auto GetLayerStack() -> LayerStack& = 0;
+		virtual auto SetEventCallback(const EventCallback& callback) -> void = 0;
 		virtual auto SwapBuffers() -> void = 0;
 		virtual auto PollEvents() -> void = 0; // TODO: move poll events to its own file.
 		virtual auto Close() -> void = 0;

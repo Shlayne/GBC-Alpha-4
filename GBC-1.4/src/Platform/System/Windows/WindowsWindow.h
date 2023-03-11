@@ -11,7 +11,8 @@ namespace gbc
 		WindowsWindow(const WindowInfo& info);
 		virtual ~WindowsWindow();
 	public:
-		virtual auto SetEventCallback(const EventCallback& callback) -> EventCallback override;
+		inline virtual auto GetLayerStack() -> LayerStack& override { return m_LayerStack; }
+		virtual auto SetEventCallback(const EventCallback& callback) -> void override;
 		virtual auto SwapBuffers() -> void override;
 		virtual auto PollEvents() -> void override; // TODO: move poll events to its own file.
 		virtual auto Close() -> void override;
@@ -56,6 +57,7 @@ namespace gbc
 		GLFWwindow* m_Handle{nullptr};
 
 		EventCallback m_EventCallback;
+		LayerStack m_LayerStack;
 		std::string m_Title;
 
 		// Flags

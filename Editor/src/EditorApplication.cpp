@@ -1,5 +1,6 @@
 #include "EditorApplication.h"
 #include "GBC/Core/EntryPoint.h"
+#include "EditorLayer.h"
 
 namespace gbc
 {
@@ -11,7 +12,8 @@ namespace gbc
 		windowInfo.height = 900;
 		windowInfo.title = "GBC Editor";
 		windowInfo.vsync = true;
-		OpenWindow(windowInfo);
+		Window& window{OpenWindow(windowInfo)};
+		PushLayer(window, new EditorLayer());
 	}
 
 	auto CreateApplication(ApplicationCommandLineArgs commandLineArgs) -> Application*
