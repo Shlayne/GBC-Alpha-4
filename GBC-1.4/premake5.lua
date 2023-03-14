@@ -26,6 +26,7 @@ project "GBC-1.4"
 
 		-- Add any dependency includes here.
 		"%{IncludeDir.glfw}",
+		"%{IncludeDir.glad}",
 		"%{IncludeDir.spdlog}",
 	}
 	
@@ -42,6 +43,7 @@ project "GBC-1.4"
 
 		links {
 			"glfw",
+			"glad",
 			"opengl32.lib"
 		}
 

@@ -39,6 +39,7 @@ include "Dependencies/Dependencies.lua"
 group "Dependencies/GBC-1.4/Platform"
 	filter "system:windows"
 		include "GBC-1.4/Dependencies/glfw-3.3.8"
+		include "GBC-1.4/Dependencies/glad-0.1.35"
 	filter ""
 group "Dependencies/Editor"
 

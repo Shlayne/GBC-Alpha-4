@@ -1,6 +1,7 @@
 #include "gbcpch.h"
 #include "WindowsWindow.h"
 #include "GBC/Event/Events.h"
+#include <glad/glad.h>
 
 namespace gbc
 {
@@ -31,6 +32,10 @@ namespace gbc
 		{
 			// TODO: profile scope
 			glfwMakeContextCurrent(m_Handle);
+		}
+		{
+			// TODO: profile scope
+			GBC_CORE_VERIFY(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "Failed to initialize GLAD.");
 		}
 		glfwSetWindowUserPointer(m_Handle, this);
 		SetVSync(info.vsync);

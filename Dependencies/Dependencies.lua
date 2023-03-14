@@ -5,6 +5,7 @@ Library = {}
 -- Include Directories
 	-- Header and Source; they have their own project.
 	IncludeDir["glfw"] = "%{wks.location}/GBC-1.4/Dependencies/glfw-3.3.8/include"
+	IncludeDir["glad"] = "%{wks.location}/GBC-1.4/Dependencies/glad-0.1.35/include"
 	IncludeDir["spdlog"] = "%{wks.location}/GBC-1.4/Dependencies/spdlog-1.11.0/include"
 
 	-- Header-Only; they don't have their own project.
