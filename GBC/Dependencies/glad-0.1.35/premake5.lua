@@ -38,7 +38,6 @@ project "glad"
 		symbols "On"
 
 	filter "configurations:Dist"
-		kind "WindowedApp"
 		runtime "Release"
 		optimize "Full"
 		symbols "Off"

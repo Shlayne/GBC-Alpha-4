@@ -19,7 +19,7 @@ project "Editor"
 	includedirs {
 		-- Add any project source directories here.
 		"src",
-		"%{wks.location}/GBC-1.4/src",
+		"%{wks.location}/GBC/src",
 
 		-- Add any dependency includes here.
 		"%{IncludeDir.spdlog}",
@@ -27,7 +27,7 @@ project "Editor"
 	
 	-- Add any links dependency libs via their project names here.
 	links {
-		"GBC-1.4"
+		"GBC"
 	}
 
 	filter "system:windows"

@@ -13,7 +13,7 @@ namespace gbc
 		windowInfo.title = "GBC Editor";
 		windowInfo.vsync = true;
 		Window& window{OpenWindow(windowInfo)};
-		PushLayer(window, new EditorLayer());
+		PushLayer(window, new EditorLayer{});
 	}
 
 	auto CreateApplication(ApplicationCommandLineArgs commandLineArgs) -> Application*

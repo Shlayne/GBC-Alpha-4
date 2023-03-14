@@ -1,4 +1,4 @@
-project "GBC-1.4"
+project "GBC"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++20"

@@ -36,14 +36,14 @@ OutputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 include "Dependencies/premake/Custom/notyetimplemented.lua"
 include "Dependencies/Dependencies.lua"
 
-group "Dependencies/GBC-1.4/Platform"
+group "Dependencies/GBC/Platform"
 	filter "system:windows"
-		include "GBC-1.4/Dependencies/glfw-3.3.8"
-		include "GBC-1.4/Dependencies/glad-0.1.35"
+		include "GBC/Dependencies/glfw-3.3.8"
+		include "GBC/Dependencies/glad-0.1.35"
 	filter ""
 group "Dependencies/Editor"
 
 group ""
 
-include "GBC-1.4"
+include "GBC"
 include "Editor"
