@@ -23,11 +23,16 @@ namespace gbc
 	{
 		GBC_CORE_ASSERT(!s_ApplicationInstance, "Tried to recreate Application.");
 		s_ApplicationInstance = this;
+
+		System::Init();
 	}
 
 	Application::~Application()
 	{
 		GBC_CORE_ASSERT(s_ApplicationInstance, "Tried to redestroy Application.");
+
+		System::Shutdown();
+
 		s_ApplicationInstance = nullptr;
 	}
 
@@ -44,76 +49,109 @@ namespace gbc
 
 	auto Application::OpenWindow(const WindowInfo& info) -> Window&
 	{
-		Window& window = *m_Windows.emplace_back(Window::CreateScope(info));
+		Window& window{*m_Windows.emplace_back(Window::CreateScope(info))};
 		window.SetEventCallback(GBC_BIND_FUNC(OnEvent));
 		return window;
 	}
 
-	auto Application::PushLayer(Window& window, Layer* layer) -> void
+	auto Application::PushImGuiOverlay() -> void
 	{
-		LayerStack& layerStack{window.GetLayerStack()};
-		layerStack.PushLayer(layer);
+		GBC_CORE_ASSERT(!m_ImGuiOverlay, "Tried to repush ImGuiOverlay.");
+
+		m_ImGuiOverlay = new ImGuiOverlay{};
+		PushOverlay(m_ImGuiOverlay);
+	}
+
+	auto Application::PushLayer(Layer* layer) -> void
+	{
+		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
-	auto Application::PopLayer(Window& window) -> Layer*
+	auto Application::PopLayer() -> Layer*
 	{
-		LayerStack& layerStack{window.GetLayerStack()};
-		Layer* layer{layerStack.PopLayer()};
-		layer->OnAttach();
+		Layer* layer{m_LayerStack.PopLayer()};
+		layer->OnDetach();
 		return layer;
 	}
 
-	auto Application::PushOverlay(Window& window, Layer* overlay) -> void
+	auto Application::PushOverlay(Layer* overlay) -> void
 	{
-		LayerStack& layerStack{window.GetLayerStack()};
-		layerStack.PushOverlay(overlay);
+		m_LayerStack.PushOverlay(overlay);
 		overlay->OnAttach();
 	}
 
-	auto Application::PopOverlay(Window& window) -> Layer*
+	auto Application::PopOverlay() -> Layer*
 	{
-		LayerStack& layerStack{window.GetLayerStack()};
-		Layer* overlay{layerStack.PopOverlay()};
-		overlay->OnAttach();
+		Layer* overlay{m_LayerStack.PopOverlay()};
+		overlay->OnDetach();
 		return overlay;
 	}
 
 	auto Application::OnEvent(Event& event, Window* window) -> void
 	{
-		if (!event.IsApplicationOnly())
+		GBC_CORE_ASSERT(window, "window == nullptr");
+
+		for (auto it{m_LayerStack.rbegin()}; !event.IsHandled() && it != m_LayerStack.rend(); ++it)
 		{
-			GBC_CORE_ASSERT(window, "window == nullptr");
-			auto& layerStack = window->GetLayerStack();
-			for (auto it = layerStack.rbegin(); !event.IsHandled() && it != layerStack.rend(); ++it)
-				(*it)->OnEvent(event);
+			Layer* layer{*it};
+			if (layer->IsEnabled())
+				layer->OnEvent(event);
 		}
+
 		event.Dispatch(this, &Application::OnWindowCloseEvent, window);
 	}
 
 	auto Application::OnWindowCloseEvent(WindowCloseEvent& event, Window* window) -> void
 	{
 		GBC_CORE_ASSERT(window, "window == nullptr");
-		auto it = std::find_if(m_Windows.begin(), m_Windows.end(), [window](const Scope<Window>& w) -> bool { return w.get() == window; });
-		GBC_CORE_ASSERT(it != m_Windows.end(), "it == m_Windows.end()");
-		m_Windows.erase(it);
-
-		if (m_Windows.empty() && m_CloseOnLastWindowClosed)
-			Close();
+		window->Close();
 	}
 
 	auto Application::Run() -> void
 	{
 		while (m_Running)
 		{
-			for (auto& window : m_Windows)
-				for (auto& layer : window->GetLayerStack())
-					layer->OnUpdate(0.0f); // TODO: timestep
+			Timestep timestep{System::GetTimestep()};
 
-			for (auto& window : m_Windows)
-				window->SwapBuffers();
-			if (!m_Windows.empty()) // TODO: move poll events to its own file.
-				m_Windows.front()->PollEvents();
+			// Update all enabled layers.
+			for (Layer* layer : m_LayerStack)
+				if (layer->IsEnabled())
+					layer->OnUpdate(timestep);
+
+			if (!m_Windows.empty())
+			{
+				if (m_ImGuiOverlay)
+				{
+					// Render ImGui for all enabled layers.
+					m_ImGuiOverlay->Begin();
+					for (Layer* layer : m_LayerStack)
+						if (layer->IsEnabled())
+							layer->OnImGuiRender();
+					m_ImGuiOverlay->End();
+				}
+
+				// Update window buffers.
+				for (auto& window : m_Windows)
+					window->SwapBuffers();
+
+				// Poll events.
+				System::PollEvents();
+
+				// Remove all windows that should close.
+				std::erase_if(m_Windows, [](const Scope<Window>& window) { return window->ShouldClose(); });
+			}
+
+			// Close the application if applicable.
+			if (m_CloseOnLastWindowClosed && m_Windows.empty())
+				Close();
+		}
+
+		// Destroy all layers.
+		for (Layer* layer : m_LayerStack)
+		{
+			layer->OnDetach();
+			delete layer;
 		}
 	}
 }

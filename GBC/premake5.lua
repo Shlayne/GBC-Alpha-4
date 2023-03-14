@@ -27,12 +27,13 @@ project "GBC"
 		-- Add any dependency includes here.
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.glad}",
+		"%{IncludeDir.imgui}",
 		"%{IncludeDir.spdlog}",
 	}
 	
 	-- Add any links dependency libs via their project names here.
 	links {
-		--	"__PROJECT_NAME__"
+		"imgui"
 	}
 
 	filter "system:windows"

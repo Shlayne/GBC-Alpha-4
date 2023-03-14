@@ -1,4 +1,5 @@
 #include "EditorLayer.h"
+#include <imgui.h>
 
 namespace gbc
 {
@@ -12,9 +13,15 @@ namespace gbc
 
 	}
 
-	auto EditorLayer::OnUpdate(float timestep) -> void
+	auto EditorLayer::OnUpdate(Timestep timestep) -> void
 	{
 
+	}
+
+	auto EditorLayer::OnImGuiRender() -> void
+	{
+		// NOTE: the window is currently not being cleared, so it looks ew
+		ImGui::ShowDemoWindow();
 	}
 
 	auto EditorLayer::OnEvent(Event& event) -> void

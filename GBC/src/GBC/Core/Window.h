@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GBC/Event/Event.h"
-#include "GBC/Core/LayerStack.h"
 #include <functional>
 
 namespace gbc
@@ -22,14 +21,17 @@ namespace gbc
 	class Window
 	{
 	public:
-		static Scope<Window> CreateScope(const WindowInfo& info = {});
+		static auto CreateScope(const WindowInfo& info = {}) -> Scope<Window>;
 		virtual ~Window() = default;
 	public:
-		virtual auto GetLayerStack() -> LayerStack& = 0;
+		virtual auto GetNativeWindow() -> void* = 0;
 		virtual auto SetEventCallback(const EventCallback& callback) -> void = 0;
 		virtual auto SwapBuffers() -> void = 0;
-		virtual auto PollEvents() -> void = 0; // TODO: move poll events to its own file.
 		virtual auto Close() -> void = 0;
+		virtual auto ShouldClose() -> bool = 0;
+	public:
+		virtual auto GetWidth() const -> uint32_t = 0;
+		virtual auto GetHeight() const -> uint32_t = 0;
 	public:
 		virtual auto SetTitle(std::string_view title) -> void = 0;
 		virtual auto GetTitle() const -> std::string = 0;

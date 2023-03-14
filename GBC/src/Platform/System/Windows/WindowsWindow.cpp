@@ -5,29 +5,19 @@
 
 namespace gbc
 {
-	Scope<Window> Window::CreateScope(const WindowInfo& info)
+	auto Window::CreateScope(const WindowInfo& info) -> Scope<Window>
 	{
 		return ::gbc::CreateScope<WindowsWindow>(info);
 	}
 
-	uint32_t s_WindowCount{0};
-
 	WindowsWindow::WindowsWindow(const WindowInfo& info)
 	{
-		// TODO: profile scope
+		// TODO: profile function
 
-		if (!s_WindowCount)
-		{
-			// TODO: profile scope
-			GBC_CORE_VERIFY(glfwInit(), "Failed to initialize GLFW.");
-
-			SetCallbacks();
-		}
 		{
 			// TODO: profile scope
 			m_Handle = glfwCreateWindow(static_cast<int>(info.width), static_cast<int>(info.height), info.title.data(), nullptr, nullptr);
 			GBC_CORE_ASSERT(m_Handle, "Failed to create GLFW window.");
-			++s_WindowCount;
 		}
 		{
 			// TODO: profile scope
@@ -46,17 +36,8 @@ namespace gbc
 
 	WindowsWindow::~WindowsWindow()
 	{
-		GBC_CORE_ASSERT(s_WindowCount > 0, "Tried to redestroy a window.");
-
-		{
-			// TODO: profile scope
-			glfwDestroyWindow(m_Handle);
-		}
-		if (!--s_WindowCount)
-		{
-			// TODO: profile scope
-			glfwTerminate();
-		}
+		// TODO: profile function
+		glfwDestroyWindow(m_Handle);
 	}
 
 	auto WindowsWindow::SetEventCallback(const EventCallback& callback) -> void
@@ -66,19 +47,18 @@ namespace gbc
 
 	auto WindowsWindow::SwapBuffers() -> void
 	{
+		// TODO: profile function
 		glfwSwapBuffers(m_Handle);
-	}
-
-	auto WindowsWindow::PollEvents() -> void
-	{
-		glfwPollEvents(); // TODO: move poll events to its own file.
 	}
 
 	auto WindowsWindow::Close() -> void
 	{
-		// Send a fake close event that only the Application pays attention to.
-		WindowCloseEvent event{true};
-		m_EventCallback(event, this);
+		m_ShouldClose = true;
+	}
+
+	auto WindowsWindow::ShouldClose() -> bool
+	{
+		return m_ShouldClose || glfwWindowShouldClose(m_Handle);
 	}
 
 	auto WindowsWindow::SetTitle(std::string_view title) -> void
@@ -91,15 +71,6 @@ namespace gbc
 	{
 		if (m_VSync != enabled)
 			glfwSwapInterval(!!(m_VSync = enabled));
-	}
-
-	auto WindowsWindow::SetCallbacks() -> void
-	{
-		// Miscellaneous Callbacks
-#if GBC_ENABLE_LOGGING
-		glfwSetErrorCallback(&WindowsWindow::ErrorCallback);
-#endif
-		// TODO: monitor and joystick callbacks would go here.
 	}
 
 	auto WindowsWindow::SetWindowCallbacks(GLFWwindow* handle) -> void
@@ -144,6 +115,8 @@ namespace gbc
 	auto WindowsWindow::WindowSizeCallback(GLFWwindow* handle, int width, int height) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
+		window.m_Width = static_cast<uint32_t>(width);
+		window.m_Height = static_cast<uint32_t>(height);
 		WindowResizeEvent event{static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
 		window.m_EventCallback(event, &window);
 	}
@@ -279,13 +252,4 @@ namespace gbc
 		MouseEnterEvent event{entered == GLFW_TRUE};
 		window.m_EventCallback(event, &window);
 	}
-
-	// Miscellaneous Callbacks
-
-#if GBC_ENABLE_LOGGING
-	auto WindowsWindow::ErrorCallback(int errorCode, const char* description) -> void
-	{
-		GBC_CORE_ERROR("GLFW Error ({}): {}", errorCode, description);
-	}
-#endif
 }

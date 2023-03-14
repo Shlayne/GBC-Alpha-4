@@ -22,6 +22,7 @@ project "Editor"
 		"%{wks.location}/GBC/src",
 
 		-- Add any dependency includes here.
+		"%{IncludeDir.imgui}",
 		"%{IncludeDir.spdlog}",
 	}
 	

@@ -9,8 +9,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowClose);
 
-		constexpr WindowCloseEvent(bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly} {}
+		constexpr WindowCloseEvent()
+			: Event{GetStaticType()} {}
 
 #if GBC_ENABLE_LOGGING
 		virtual std::string ToString() const override;
@@ -22,8 +22,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowResize);
 
-		constexpr WindowResizeEvent(uint32_t width, uint32_t height, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_Width{width}, m_Height{height} {}
+		constexpr WindowResizeEvent(uint32_t width, uint32_t height)
+			: Event{GetStaticType()}, m_Width{width}, m_Height{height} {}
 
 		constexpr auto GetWidth() const noexcept -> uint32_t { return m_Width; }
 		constexpr auto GetHeight() const noexcept -> uint32_t { return m_Height; }
@@ -41,8 +41,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowFramebufferResize);
 
-		constexpr WindowFramebufferResizeEvent(uint32_t width, uint32_t height, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_Width{width}, m_Height{height} {}
+		constexpr WindowFramebufferResizeEvent(uint32_t width, uint32_t height)
+			: Event{GetStaticType()}, m_Width{width}, m_Height{height} {}
 
 		constexpr auto GetFramebufferWidth() const noexcept -> uint32_t { return m_Width; }
 		constexpr auto GetFramebufferHeight() const noexcept -> uint32_t { return m_Height; }
@@ -60,8 +60,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowMove);
 
-		constexpr WindowMoveEvent(int32_t x, int32_t y, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_X{x}, m_Y{y} {}
+		constexpr WindowMoveEvent(int32_t x, int32_t y)
+			: Event{GetStaticType()}, m_X{x}, m_Y{y} {}
 
 		constexpr auto GetX() const noexcept -> int32_t { return m_X; }
 		constexpr auto GetY() const noexcept -> int32_t { return m_Y; }
@@ -79,8 +79,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowFocus);
 
-		constexpr WindowFocusEvent(bool focused, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_Focused{focused} {}
+		constexpr WindowFocusEvent(bool focused)
+			: Event{GetStaticType()}, m_Focused{focused} {}
 
 		constexpr auto IsFocused() const noexcept -> bool { return m_Focused; }
 
@@ -96,8 +96,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowMinimize);
 
-		constexpr WindowMinimizeEvent(bool minimized, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_Minimized{minimized} {}
+		constexpr WindowMinimizeEvent(bool minimized)
+			: Event{GetStaticType()}, m_Minimized{minimized} {}
 
 		constexpr auto IsMinimized() const noexcept -> bool { return m_Minimized; }
 
@@ -113,8 +113,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowMaximize);
 
-		constexpr WindowMaximizeEvent(bool maximized, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_Maximized{maximized} {}
+		constexpr WindowMaximizeEvent(bool maximized)
+			: Event{GetStaticType()}, m_Maximized{maximized} {}
 
 		constexpr auto IsMaximized() const noexcept -> bool { return m_Maximized; }
 
@@ -130,8 +130,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowPathDrop);
 
-		constexpr WindowPathDropEvent(uint32_t pathCount, const char** paths, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_PathCount{pathCount}, m_Paths{paths} {}
+		constexpr WindowPathDropEvent(uint32_t pathCount, const char** paths)
+			: Event{GetStaticType()}, m_PathCount{pathCount}, m_Paths{paths} {}
 
 		constexpr auto GetPathCount() const noexcept -> uint32_t { return m_PathCount; }
 		constexpr auto GetPaths() const noexcept -> const char* const* { return m_Paths; }
@@ -150,8 +150,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowContentScale);
 
-		constexpr WindowContentScaleEvent(float scaleX, float scaleY, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_ScaleX{scaleX}, m_ScaleY{scaleY} {}
+		constexpr WindowContentScaleEvent(float scaleX, float scaleY)
+			: Event{GetStaticType()}, m_ScaleX{scaleX}, m_ScaleY{scaleY} {}
 
 		constexpr auto GetScaleX() const noexcept -> float { return m_ScaleX; }
 		constexpr auto GetScaleY() const noexcept -> float { return m_ScaleY; }
@@ -169,8 +169,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowRefresh);
 
-		constexpr WindowRefreshEvent(bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly} {}
+		constexpr WindowRefreshEvent()
+			: Event{GetStaticType()} {}
 
 #if GBC_ENABLE_LOGGING
 		virtual std::string ToString() const override;

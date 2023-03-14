@@ -9,7 +9,7 @@ namespace gbc
 	{
 		Logger::Create();
 
-		Application* application = CreateApplication({argc, argv});
+		Application* application{CreateApplication({argc, argv})};
 		application->Run();
 		delete application;
 

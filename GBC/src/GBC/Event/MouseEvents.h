@@ -11,8 +11,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::MouseButtonPress);
 
-		constexpr MouseButtonPressEvent(MouseButton button, Modifiers modifiers, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_Button{button}, m_Modifiers{modifiers} {}
+		constexpr MouseButtonPressEvent(MouseButton button, Modifiers modifiers)
+			: Event{GetStaticType()}, m_Button{button}, m_Modifiers{modifiers} {}
 
 		constexpr auto GetButton() const noexcept -> MouseButton { return m_Button; }
 		constexpr auto GetModifiers() const noexcept -> Modifiers { return m_Modifiers; }
@@ -30,8 +30,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::MouseButtonRelease);
 
-		constexpr MouseButtonReleaseEvent(MouseButton button, Modifiers modifiers, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_Button{button}, m_Modifiers{modifiers} {}
+		constexpr MouseButtonReleaseEvent(MouseButton button, Modifiers modifiers)
+			: Event{GetStaticType()}, m_Button{button}, m_Modifiers{modifiers} {}
 
 		constexpr auto GetButton() const noexcept -> MouseButton { return m_Button; }
 		constexpr auto GetModifiers() const noexcept -> Modifiers { return m_Modifiers; }
@@ -49,8 +49,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::MouseMove);
 
-		constexpr MouseMoveEvent(float x, float y, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_X{x}, m_Y{y} {}
+		constexpr MouseMoveEvent(float x, float y)
+			: Event{GetStaticType()}, m_X{x}, m_Y{y} {}
 
 		constexpr auto GetX() const noexcept -> float { return m_X; }
 		constexpr auto GetY() const noexcept -> float { return m_Y; }
@@ -68,8 +68,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::MouseScroll);
 
-		constexpr MouseScrollEvent(float offsetX, float offsetY, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_OffsetX{offsetX}, m_OffsetY{offsetY} {}
+		constexpr MouseScrollEvent(float offsetX, float offsetY)
+			: Event{GetStaticType()}, m_OffsetX{offsetX}, m_OffsetY{offsetY} {}
 
 		constexpr auto GetOffsetX() const noexcept -> float { return m_OffsetX; }
 		constexpr auto GetOffsetY() const noexcept -> float { return m_OffsetY; }
@@ -87,8 +87,8 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::MouseEnter);
 
-		constexpr MouseEnterEvent(bool entered, bool applicationOnly = false)
-			: Event{GetStaticType(), applicationOnly}, m_Entered{entered} {}
+		constexpr MouseEnterEvent(bool entered)
+			: Event{GetStaticType()}, m_Entered{entered} {}
 
 		constexpr auto HasEntered() const noexcept -> bool { return m_Entered; }
 

@@ -2,9 +2,8 @@
 
 namespace gbc
 {
-	constexpr Event::Event(EventType type, bool applicationOnly) noexcept
+	constexpr Event::Event(EventType type) noexcept
 		: m_Type{type}
-		, m_ApplicationOnly{applicationOnly}
 	{
 
 	}
@@ -12,6 +11,21 @@ namespace gbc
 	constexpr auto Event::GetType() const noexcept -> EventType
 	{
 		return m_Type;
+	}
+
+	constexpr auto Event::IsWindowEvent() const noexcept -> bool
+	{
+		return EventType::_Window_First <= m_Type && m_Type <= EventType::_Window_Last;
+	}
+
+	constexpr auto Event::IsKeyEvent() const noexcept -> bool
+	{
+		return EventType::_Key_First <= m_Type && m_Type <= EventType::_Key_Last;
+	}
+
+	constexpr auto Event::IsMouseEvent() const noexcept -> bool
+	{
+		return EventType::_Mouse_First <= m_Type && m_Type <= EventType::_Mouse_Last;
 	}
 
 	constexpr auto Event::IsHandled() const noexcept -> bool
@@ -22,11 +36,6 @@ namespace gbc
 	constexpr auto Event::Handle() noexcept -> void
 	{
 		m_Handled = true;
-	}
-
-	constexpr auto Event::IsApplicationOnly() const noexcept -> bool
-	{
-		return m_ApplicationOnly;
 	}
 	
 	template<typename... Args>

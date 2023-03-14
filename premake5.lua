@@ -37,6 +37,7 @@ include "Dependencies/premake/Custom/notyetimplemented.lua"
 include "Dependencies/Dependencies.lua"
 
 group "Dependencies/GBC/Platform"
+	include "GBC/Dependencies/imgui-docking-wip-1.89.4"
 	filter "system:windows"
 		include "GBC/Dependencies/glfw-3.3.8"
 		include "GBC/Dependencies/glad-0.1.35"

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GBC/Core/Core.h"
-#include <functional>
 
 namespace gbc
 {
@@ -12,6 +11,10 @@ namespace gbc
 			WindowPathDrop, WindowFramebufferResize, WindowContentScale, WindowRefresh,
 		KeyPress, KeyRepeat, KeyRelease, KeyCharType,
 		MouseButtonPress, MouseButtonRelease, MouseMove, MouseScroll, MouseEnter,
+
+		_Window_First = WindowClose, _Window_Last = WindowRefresh,
+		_Key_First = KeyPress, _Key_Last = KeyCharType,
+		_Mouse_First = MouseButtonPress, _Mouse_Last = MouseEnter,
 	};
 
 #define _GBC_EVENT_GET_STATIC_TYPE(type) static constexpr auto GetStaticType() noexcept -> EventType { return type; }
@@ -19,9 +22,12 @@ namespace gbc
 	class Event
 	{
 	protected:
-		constexpr Event(EventType type, bool applicationOnly = false) noexcept;
+		constexpr Event(EventType type) noexcept;
 	public:
 		constexpr auto GetType() const noexcept -> EventType;
+		constexpr auto IsWindowEvent() const noexcept -> bool;
+		constexpr auto IsKeyEvent() const noexcept -> bool;
+		constexpr auto IsMouseEvent() const noexcept -> bool;
 		constexpr auto IsHandled() const noexcept -> bool;
 		constexpr auto Handle() noexcept -> void;
 	public:
@@ -44,11 +50,9 @@ namespace gbc
 		auto Dispatch(Class* object, auto(Class::*callback)(EventSubclass&, Args...) -> void, auto&&... args) -> void;
 	private:
 		friend class Application;
-		constexpr auto IsApplicationOnly() const noexcept -> bool;
 	private:
 		EventType m_Type : 5 {EventType::None};
 		bool m_Handled : 1 {false};
-		bool m_ApplicationOnly : 1 {false};
 	};
 
 #if GBC_ENABLE_LOGGING
