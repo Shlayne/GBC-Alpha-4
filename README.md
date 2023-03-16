@@ -5,4 +5,5 @@ It served me well for learning to program, but in that process, too many mistake
 were made, and as such, had become unreadable. This is a fresh start, where I can
 put into it my new knowledge I have since then learned.
 
+[GitHub](https://github.com/Shlayne/GBC-1.4)<br>
 [Trello](https://trello.com/b/FvwqNnbR/gbc-14)
