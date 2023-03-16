@@ -19,17 +19,31 @@ namespace gbc
 
 	Application::Application(const ApplicationInfo& info)
 		: m_CommandLineArgs{info.commandLineArgs}
-		, m_CloseOnLastWindowClosed{info.closeOnLastWindowClosed}
 	{
 		GBC_CORE_ASSERT(!s_ApplicationInstance, "Tried to recreate Application.");
 		s_ApplicationInstance = this;
 
 		System::Init();
+
+		OpenWindow(info.primaryWindowInfo);
+
+		m_ImGuiOverlay = new ImGuiOverlay{};
+		PushOverlay(m_ImGuiOverlay);
 	}
 
 	Application::~Application()
 	{
 		GBC_CORE_ASSERT(s_ApplicationInstance, "Tried to redestroy Application.");
+
+		// Destroy all layers.
+		for (Layer* layer : m_LayerStack)
+		{
+			layer->OnDetach();
+			delete layer;
+		}
+
+		// Destroy all windows explicitly before System::Shutdown.
+		m_Windows.clear();
 
 		System::Shutdown();
 
@@ -52,14 +66,6 @@ namespace gbc
 		Window& window{*m_Windows.emplace_back(Window::CreateScope(info))};
 		window.SetEventCallback(GBC_BIND_FUNC(OnEvent));
 		return window;
-	}
-
-	auto Application::PushImGuiOverlay() -> void
-	{
-		GBC_CORE_ASSERT(!m_ImGuiOverlay, "Tried to repush ImGuiOverlay.");
-
-		m_ImGuiOverlay = new ImGuiOverlay{};
-		PushOverlay(m_ImGuiOverlay);
 	}
 
 	auto Application::PushLayer(Layer* layer) -> void
@@ -110,7 +116,7 @@ namespace gbc
 
 	auto Application::Run() -> void
 	{
-		while (m_Running)
+		while (m_Running && !m_Windows.empty())
 		{
 			Timestep timestep{System::GetTimestep()};
 
@@ -141,17 +147,6 @@ namespace gbc
 				// Remove all windows that should close.
 				std::erase_if(m_Windows, [](const Scope<Window>& window) { return window->ShouldClose(); });
 			}
-
-			// Close the application if applicable.
-			if (m_CloseOnLastWindowClosed && m_Windows.empty())
-				Close();
-		}
-
-		// Destroy all layers.
-		for (Layer* layer : m_LayerStack)
-		{
-			layer->OnDetach();
-			delete layer;
 		}
 	}
 }

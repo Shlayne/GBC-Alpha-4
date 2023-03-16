@@ -25,7 +25,7 @@ namespace gbc
 	struct ApplicationInfo
 	{
 		ApplicationCommandLineArgs commandLineArgs;
-		bool closeOnLastWindowClosed = true;
+		WindowInfo primaryWindowInfo{};
 	};
 
 	class Application
@@ -40,10 +40,6 @@ namespace gbc
 		auto GetWindow(size_t index = 0) -> Window&;
 		auto OpenWindow(const WindowInfo& info) -> Window&;
 		inline auto GetCommandLineArgs() const noexcept -> ApplicationCommandLineArgs { return m_CommandLineArgs; }
-	public:
-		auto PushImGuiOverlay() -> void;
-		inline auto HasImGuiOverlay() noexcept -> bool { return m_ImGuiOverlay; }
-		inline auto GetImGuiOverlay() noexcept -> ImGuiOverlay& { return *m_ImGuiOverlay; }
 	public:
 		auto PushLayer(Layer* layer) -> void;
 		auto PopLayer() -> Layer*;
@@ -60,7 +56,6 @@ namespace gbc
 
 		// Flags
 		bool m_Running : 1 {true};
-		bool m_CloseOnLastWindowClosed : 1 {false};
 	private:
 		friend auto Main(int argc, char** argv) -> int;
 		auto Run() -> void;

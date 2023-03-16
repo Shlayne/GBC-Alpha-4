@@ -7,12 +7,6 @@ namespace gbc
 	EditorApplication::EditorApplication(ApplicationInfo applicationInfo)
 		: Application{applicationInfo}
 	{
-		WindowInfo windowInfo;
-		windowInfo.width = 1600;
-		windowInfo.height = 900;
-		windowInfo.title = "GBC Editor";
-		windowInfo.vsync = true;
-		Window& window{OpenWindow(windowInfo)};
 		PushLayer(new EditorLayer{});
 	}
 
@@ -20,9 +14,13 @@ namespace gbc
 	{
 		ApplicationInfo applicationInfo;
 		applicationInfo.commandLineArgs = commandLineArgs;
-		applicationInfo.closeOnLastWindowClosed = true;
-		Application* application{new EditorApplication{applicationInfo}};
-		application->PushImGuiOverlay();
-		return application;
+
+		WindowInfo& windowInfo = applicationInfo.primaryWindowInfo;
+		windowInfo.width = 1600;
+		windowInfo.height = 900;
+		windowInfo.title = "GBC Editor";
+		windowInfo.vsync = true;
+
+		return new EditorApplication{applicationInfo};
 	}
 }
