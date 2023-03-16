@@ -22,7 +22,6 @@ project "imgui"
 	}
 
 	includedirs {
-		"%{IncludeDir.glfw}",
 		"%{IncludeDir.imgui}"
 	}
 
@@ -32,6 +31,10 @@ project "imgui"
 		files {
 			"backends/imgui_impl_opengl3.cpp",
 			"backends/imgui_impl_glfw.cpp",
+		}
+
+		includedirs {
+			"%{IncludeDir.glfw}"
 		}
 
 		defines {
