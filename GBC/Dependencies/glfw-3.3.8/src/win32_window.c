@@ -2199,18 +2199,26 @@ int _glfwPlatformCreateStandardCursor(_GLFWcursor* cursor, int shape)
 {
     int id = 0;
 
-    if (shape == GLFW_ARROW_CURSOR)
-        id = OCR_NORMAL;
-    else if (shape == GLFW_IBEAM_CURSOR)
-        id = OCR_IBEAM;
-    else if (shape == GLFW_CROSSHAIR_CURSOR)
-        id = OCR_CROSS;
-    else if (shape == GLFW_HAND_CURSOR)
-        id = OCR_HAND;
-    else if (shape == GLFW_HRESIZE_CURSOR)
-        id = OCR_SIZEWE;
-    else if (shape == GLFW_VRESIZE_CURSOR)
-        id = OCR_SIZENS;
+	if (shape == GLFW_ARROW_CURSOR)
+		id = OCR_NORMAL;
+	else if (shape == GLFW_IBEAM_CURSOR)
+		id = OCR_IBEAM;
+	else if (shape == GLFW_CROSSHAIR_CURSOR)
+		id = OCR_CROSS;
+	else if (shape == GLFW_HAND_CURSOR)
+		id = OCR_HAND;
+	else if (shape == GLFW_HRESIZE_CURSOR)
+		id = OCR_SIZEWE;
+	else if (shape == GLFW_VRESIZE_CURSOR)
+		id = OCR_SIZENS;
+	else if (shape == GLFW_RESIZE_NWSE_CURSOR)
+		id = OCR_SIZENWSE;
+	else if (shape == GLFW_RESIZE_NESW_CURSOR)
+		id = OCR_SIZENESW;
+	else if (shape == GLFW_RESIZE_ALL_CURSOR)
+		id = OCR_SIZEALL;
+	else if (shape == GLFW_NOT_ALLOWED_CURSOR)
+		id = OCR_NO;
     else
         return GLFW_FALSE;
 

@@ -1101,6 +1101,26 @@ extern "C" {
  *  The vertical resize arrow shape.
  */
 #define GLFW_VRESIZE_CURSOR         0x00036006
+/*! @brief The top-left to bottom-right diagonal resize/move arrow shape.
+ *
+ *  The top-left to bottom-right diagonal resize/move arrow shape.
+ */
+#define GLFW_RESIZE_NWSE_CURSOR     0x00036007
+/*! @brief The top-right to bottom-left diagonal resize/move arrow shape.
+ *
+ *  The top-right to bottom-left diagonal resize/move arrow shape.
+ */
+#define GLFW_RESIZE_NESW_CURSOR     0x00036008
+/*! @brief The omni-directional resize/move cursor shape.
+ *
+ *  The omni-directional resize/move cursor shape.
+ */
+#define GLFW_RESIZE_ALL_CURSOR      0x00036009
+/*! @brief The operation-not-allowed shape.
+ *
+ *  The operation-not-allowed shape.
+ */
+#define GLFW_NOT_ALLOWED_CURSOR     0x0003600A
 /*! @} */
 
 #define GLFW_CONNECTED              0x00040001
