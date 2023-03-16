@@ -59,6 +59,13 @@ namespace gbc
 		return static_cast<int32_t>(y);
 	}
 
+	auto Input::GetRelativeMousePos(Window& window) noexcept -> glm::ivec2
+	{
+		glm::dvec2 mousePos{0.0};
+		GetMousePosition(window, &mousePos.x, &mousePos.y);
+		return mousePos;
+	}
+
 	auto Input::GetAbsoluteMouseX() noexcept -> int32_t
 	{
 		int32_t windowX{0};
@@ -71,5 +78,15 @@ namespace gbc
 		int32_t windowY{0};
 		GetWindowPosition(Application::Get().GetWindow(), nullptr, &windowY);
 		return static_cast<int32_t>(windowY + GetRelativeMouseY());
+	}
+
+	auto Input::GetAbsoluteMousePos() noexcept -> glm::ivec2
+	{
+		glm::dvec2 mousePos{0.0};
+		glm::ivec2 windowPos{0};
+		Window& window{Application::Get().GetWindow()};
+		GetMousePosition(window, &mousePos.x, &mousePos.y);
+		GetWindowPosition(window, &windowPos.x, &windowPos.y);
+		return windowPos += mousePos;
 	}
 }

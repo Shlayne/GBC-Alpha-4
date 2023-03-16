@@ -24,6 +24,8 @@ project "Editor"
 		-- Add any dependency includes here.
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.spdlog}",
+
+		"%{IncludeDir.glm}",
 	}
 	
 	-- Add any links dependency libs via their project names here.

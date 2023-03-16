@@ -4,6 +4,7 @@
 #include "GBC/Core/Keycodes.h"
 #include "GBC/Core/MouseButtons.h"
 #include "GBC/Event/Modifiers.h"
+#include <glm/glm.hpp>
 
 namespace gbc
 {
@@ -18,8 +19,10 @@ namespace gbc
 
 		static auto GetRelativeMouseX(Window& window = Application::Get().GetWindow()) noexcept -> int32_t;
 		static auto GetRelativeMouseY(Window& window = Application::Get().GetWindow()) noexcept -> int32_t;
+		static auto GetRelativeMousePos(Window& window = Application::Get().GetWindow()) noexcept -> glm::ivec2;
 
 		static auto GetAbsoluteMouseX() noexcept -> int32_t;
 		static auto GetAbsoluteMouseY() noexcept -> int32_t;
+		static auto GetAbsoluteMousePos() noexcept -> glm::ivec2;
 	};
 }

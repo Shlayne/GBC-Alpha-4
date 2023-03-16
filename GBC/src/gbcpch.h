@@ -3,12 +3,11 @@
 #include "GBC/Core/Core.h"
 #include "GBC/Core/Logger.h"
 
-//#include <glm/glm.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/type_ptr.hpp>
-//#define GLM_ENABLE_EXPERIMENTAL
-//#include <glm/gtx/matrix_decompose.hpp>
-//#include <glm/gtx/quaternion.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include <algorithm>
 #include <array>

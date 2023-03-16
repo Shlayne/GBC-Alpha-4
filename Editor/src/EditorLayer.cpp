@@ -15,7 +15,7 @@ namespace gbc
 
 	auto EditorLayer::OnUpdate(Timestep timestep) -> void
 	{
-		GBC_TRACE("{} {}", Input::GetAbsoluteMouseX(), Input::GetAbsoluteMouseY());
+		GBC_TRACE("{} {}", Input::GetRelativeMousePos().x, Input::GetRelativeMousePos().y);
 	}
 
 	auto EditorLayer::OnImGuiRender() -> void
