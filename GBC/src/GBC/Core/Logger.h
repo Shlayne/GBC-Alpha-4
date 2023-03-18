@@ -12,7 +12,7 @@ namespace gbc
 		static auto GetClientLogger() -> Ref<spdlog::logger>&;
 	private:
 		friend auto Main(int argc, char** argv) -> int;
-		static auto Create() -> void;
+		static auto Init() -> void;
 	};
 }
 

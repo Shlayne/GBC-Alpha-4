@@ -54,13 +54,6 @@ namespace gbc
 		EventType m_Type : 5 {EventType::None};
 		bool m_Handled : 1 {false};
 	};
-
-#if GBC_ENABLE_LOGGING
-	inline std::ostream& operator<<(std::ostream& ostream, const Event& event)
-	{
-		return ostream << event.ToString();
-	}
-#endif
 }
 
 #include "Event.inl"

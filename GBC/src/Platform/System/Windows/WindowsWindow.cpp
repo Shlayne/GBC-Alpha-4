@@ -1,13 +1,12 @@
 #include "gbcpch.h"
 #include "WindowsWindow.h"
 #include "GBC/Event/Events.h"
-#include <glad/glad.h>
 
 namespace gbc
 {
 	auto Window::CreateScope(const WindowInfo& info) -> Scope<Window>
 	{
-		return ::gbc::CreateScope<WindowsWindow>(info);
+		return gbc::CreateScope<WindowsWindow>(info);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowInfo& info)
@@ -19,14 +18,9 @@ namespace gbc
 			m_Handle = glfwCreateWindow(static_cast<int>(info.width), static_cast<int>(info.height), info.title.data(), nullptr, nullptr);
 			GBC_CORE_ASSERT(m_Handle, "Failed to create GLFW window.");
 		}
-		{
-			// TODO: profile scope
-			glfwMakeContextCurrent(m_Handle);
-		}
-		{
-			// TODO: profile scope
-			GBC_CORE_VERIFY(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "Failed to initialize GLAD.");
-		}
+
+		m_Context = Context::CreateScope(m_Handle);
+
 		glfwSetWindowUserPointer(m_Handle, this);
 		SetVSync(info.vsync);
 		m_Title = info.title;
@@ -47,8 +41,7 @@ namespace gbc
 
 	auto WindowsWindow::SwapBuffers() -> void
 	{
-		// TODO: profile function
-		glfwSwapBuffers(m_Handle);
+		m_Context->SwapBuffers();
 	}
 
 	auto WindowsWindow::Close() -> void

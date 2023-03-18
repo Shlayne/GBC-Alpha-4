@@ -8,7 +8,7 @@ namespace gbc
 	Ref<spdlog::logger> s_CoreLogger;
 	Ref<spdlog::logger> s_ClientLogger;
 
-	auto Logger::Create() -> void
+	auto Logger::Init() -> void
 	{
 		std::vector<spdlog::sink_ptr> sinks;
 		sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>())->set_pattern("%^[%T] %n: %v%$");

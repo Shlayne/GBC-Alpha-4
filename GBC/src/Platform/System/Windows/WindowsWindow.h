@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GBC/Core/Window.h"
+#include "GBC/Rendering/Context.h"
 #define GLFW_INCLUDE_NONE
 #include <glfw/glfw3.h>
 
@@ -54,6 +55,7 @@ namespace gbc
 	private:
 		GLFWwindow* m_Handle{nullptr};
 
+		Scope<Context> m_Context;
 		EventCallback m_EventCallback;
 		std::string m_Title;
 

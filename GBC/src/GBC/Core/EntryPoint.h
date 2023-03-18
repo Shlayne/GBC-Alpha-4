@@ -7,7 +7,7 @@ namespace gbc
 
 	auto Main(int argc, char** argv) -> int
 	{
-		Logger::Create();
+		Logger::Init();
 
 		Application* application{CreateApplication({argc, argv})};
 		application->Run();
