@@ -4,7 +4,7 @@
 
 namespace gbc
 {
-	Scope<Context> Context::CreateScope(void* nativeWindow)
+	auto Context::CreateScope(void* nativeWindow) -> Scope<Context>
 	{
 		// TODO: check RendererAPI::API
 		return gbc::CreateScope<OpenGLContext>(nativeWindow);

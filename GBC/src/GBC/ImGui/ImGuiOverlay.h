@@ -11,10 +11,11 @@ namespace gbc
 		virtual auto OnDetach() -> void override;
 		virtual auto OnEvent(Event& event) -> void override;
 	public:
+		inline auto SetBlockEvents(bool blockEvents) noexcept { m_BlockingEvents = blockEvents; }
+	private:
+		friend class Application;
 		auto Begin() -> void;
 		auto End() -> void;
-
-		inline auto SetBlockEvents(bool blockEvents) noexcept { m_BlockingEvents = blockEvents; }
 	private:
 		bool m_BlockingEvents{false};
 	};

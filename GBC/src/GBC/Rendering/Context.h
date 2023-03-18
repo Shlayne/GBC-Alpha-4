@@ -7,7 +7,7 @@ namespace gbc
 	class Context
 	{
 	public:
-		static Scope<Context> CreateScope(void* nativeWindow);
+		static auto CreateScope(void* nativeWindow) -> Scope<Context>;
 		virtual ~Context() = default;
 	public:
 		virtual auto SwapBuffers() -> void = 0;
