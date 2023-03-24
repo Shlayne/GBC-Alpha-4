@@ -25,7 +25,7 @@ namespace gbc
 	struct ApplicationInfo
 	{
 		ApplicationCommandLineArgs commandLineArgs;
-		WindowInfo primaryWindowInfo{};
+		WindowInfo primaryWindowInfo;
 	};
 
 	class Application

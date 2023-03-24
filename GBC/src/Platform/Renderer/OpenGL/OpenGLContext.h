@@ -1,15 +1,15 @@
 #pragma once
 
 #include "GBC/Rendering/Context.h"
-#define GLFW_INCLUDE_NONE
-#include <glfw/glfw3.h>
+
+struct GLFWwindow;
 
 namespace gbc
 {
 	class OpenGLContext : public Context
 	{
 	public:
-		OpenGLContext(void* nativeWindow);
+		OpenGLContext(const ContextInfo& info);
 	public:
 		virtual auto SwapBuffers() -> void override;
 	private:

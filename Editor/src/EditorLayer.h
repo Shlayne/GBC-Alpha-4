@@ -12,5 +12,9 @@ namespace gbc
 		virtual auto OnUpdate(Timestep timestep) -> void override;
 		virtual auto OnImGuiRender() -> void override;
 		virtual auto OnEvent(Event& event) -> void override;
+	private:
+		// TODO: move to Renderer2D or something.
+		Ref<Shader> m_Shader;
+		Ref<VertexArray> m_VertexArray;
 	};
 }

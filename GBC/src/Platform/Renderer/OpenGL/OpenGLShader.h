@@ -10,7 +10,7 @@ namespace gbc
 		OpenGLShader(const ShaderInfo& info);
 		virtual ~OpenGLShader();
 	public:
-		virtual auto Bind() -> void override;
+		virtual auto Bind() const -> void override;
 	private:
 		uint32_t m_RendererID{0};
 	};

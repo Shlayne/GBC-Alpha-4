@@ -7,6 +7,6 @@ namespace gbc
 	class EditorApplication : public Application
 	{
 	public:
-		EditorApplication(ApplicationInfo applicationInfo);
+		EditorApplication(const ApplicationInfo& info);
 	};
 }

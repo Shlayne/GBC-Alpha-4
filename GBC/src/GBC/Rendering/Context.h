@@ -4,10 +4,15 @@
 
 namespace gbc
 {
+	struct ContextInfo
+	{
+		void* nativeWindow{nullptr};
+	};
+
 	class Context
 	{
 	public:
-		static auto CreateScope(void* nativeWindow) -> Scope<Context>;
+		static auto CreateScope(const ContextInfo& info) -> Scope<Context>;
 		virtual ~Context() = default;
 	public:
 		virtual auto SwapBuffers() -> void = 0;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GBC/Event/Event.h"
+#include <glm/glm.hpp>
 #include <functional>
 
 namespace gbc
@@ -32,6 +33,8 @@ namespace gbc
 	public:
 		virtual auto GetWidth() const -> uint32_t = 0;
 		virtual auto GetHeight() const -> uint32_t = 0;
+		virtual auto GetSize() const -> glm::uvec2 = 0;
+		//virtual auto GetFramebufferSize() const -> glm::uvec2 = 0;
 	public:
 		virtual auto SetTitle(std::string_view title) -> void = 0;
 		virtual auto GetTitle() const -> std::string = 0;

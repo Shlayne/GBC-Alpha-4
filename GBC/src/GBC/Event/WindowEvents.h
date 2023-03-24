@@ -7,7 +7,7 @@ namespace gbc
 	class WindowCloseEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowClose);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowClose);
 
 		constexpr WindowCloseEvent()
 			: Event{GetStaticType()} {}
@@ -20,7 +20,7 @@ namespace gbc
 	class WindowResizeEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowResize);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowResize);
 
 		constexpr WindowResizeEvent(uint32_t width, uint32_t height)
 			: Event{GetStaticType()}, m_Width{width}, m_Height{height} {}
@@ -39,7 +39,7 @@ namespace gbc
 	class WindowFramebufferResizeEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowFramebufferResize);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowFramebufferResize);
 
 		constexpr WindowFramebufferResizeEvent(uint32_t width, uint32_t height)
 			: Event{GetStaticType()}, m_Width{width}, m_Height{height} {}
@@ -58,7 +58,7 @@ namespace gbc
 	class WindowMoveEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowMove);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowMove);
 
 		constexpr WindowMoveEvent(int32_t x, int32_t y)
 			: Event{GetStaticType()}, m_X{x}, m_Y{y} {}
@@ -77,7 +77,7 @@ namespace gbc
 	class WindowFocusEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowFocus);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowFocus);
 
 		constexpr WindowFocusEvent(bool focused)
 			: Event{GetStaticType()}, m_Focused{focused} {}
@@ -94,7 +94,7 @@ namespace gbc
 	class WindowMinimizeEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowMinimize);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowMinimize);
 
 		constexpr WindowMinimizeEvent(bool minimized)
 			: Event{GetStaticType()}, m_Minimized{minimized} {}
@@ -111,7 +111,7 @@ namespace gbc
 	class WindowMaximizeEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowMaximize);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowMaximize);
 
 		constexpr WindowMaximizeEvent(bool maximized)
 			: Event{GetStaticType()}, m_Maximized{maximized} {}
@@ -128,7 +128,7 @@ namespace gbc
 	class WindowPathDropEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowPathDrop);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowPathDrop);
 
 		constexpr WindowPathDropEvent(uint32_t pathCount, const char** paths)
 			: Event{GetStaticType()}, m_PathCount{pathCount}, m_Paths{paths} {}
@@ -148,7 +148,7 @@ namespace gbc
 	class WindowContentScaleEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowContentScale);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowContentScale);
 
 		constexpr WindowContentScaleEvent(float scaleX, float scaleY)
 			: Event{GetStaticType()}, m_ScaleX{scaleX}, m_ScaleY{scaleY} {}
@@ -167,7 +167,7 @@ namespace gbc
 	class WindowRefreshEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowRefresh);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowRefresh);
 
 		constexpr WindowRefreshEvent()
 			: Event{GetStaticType()} {}

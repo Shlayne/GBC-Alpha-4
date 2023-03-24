@@ -10,16 +10,18 @@ namespace gbc
 	}
 
 	WindowsWindow::WindowsWindow(const WindowInfo& info)
+		: m_Width{info.width}
+		, m_Height{info.height}
 	{
 		// TODO: profile function
 
 		{
 			// TODO: profile scope
-			m_Handle = glfwCreateWindow(static_cast<int>(info.width), static_cast<int>(info.height), info.title.data(), nullptr, nullptr);
+			m_Handle = glfwCreateWindow(static_cast<int>(m_Width), static_cast<int>(m_Height), info.title.data(), nullptr, nullptr);
 			GBC_CORE_ASSERT(m_Handle, "Failed to create GLFW window.");
 		}
 
-		m_Context = Context::CreateScope(m_Handle);
+		m_Context = Context::CreateScope({m_Handle});
 
 		glfwSetWindowUserPointer(m_Handle, this);
 		SetVSync(info.vsync);

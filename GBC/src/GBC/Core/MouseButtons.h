@@ -6,17 +6,18 @@
 
 namespace gbc
 {
-	enum class MouseButton : uint8_t
+	using MouseButton = uint8_t;
+	enum : MouseButton
 	{
-		Button1 = 0, ButtonLeft     = Button1,
-		Button2 = 1, ButtonRight    = Button2,
-		Button3 = 2, ButtonMiddle   = Button3,
-		Button4 = 3, ButtonBackward = Button4,
-		Button5 = 4, ButtonForward  = Button5,
-		Button6 = 5,
-		Button7 = 6,
-		Button8 = 7,
-	};
+		MouseButton_1 = 0, MouseButton_Left     = MouseButton_1,
+		MouseButton_2 = 1, MouseButton_Right    = MouseButton_2,
+		MouseButton_3 = 2, MouseButton_Middle   = MouseButton_3,
+		MouseButton_4 = 3, MouseButton_Backward = MouseButton_4,
+		MouseButton_5 = 4, MouseButton_Forward  = MouseButton_5,
+		MouseButton_6 = 5,
+		MouseButton_7 = 6,
+		MouseButton_8 = 7,
 
-	static constexpr uint16_t MouseButtonCount{static_cast<size_t>(MouseButton::Button8) + 1};
+		MouseButtonCount
+	};
 }

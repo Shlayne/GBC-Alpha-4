@@ -9,7 +9,7 @@ namespace gbc
 	class MouseButtonPressEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::MouseButtonPress);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_MouseButtonPress);
 
 		constexpr MouseButtonPressEvent(MouseButton button, Modifiers modifiers)
 			: Event{GetStaticType()}, m_Button{button}, m_Modifiers{modifiers} {}
@@ -28,7 +28,7 @@ namespace gbc
 	class MouseButtonReleaseEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::MouseButtonRelease);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_MouseButtonRelease);
 
 		constexpr MouseButtonReleaseEvent(MouseButton button, Modifiers modifiers)
 			: Event{GetStaticType()}, m_Button{button}, m_Modifiers{modifiers} {}
@@ -47,7 +47,7 @@ namespace gbc
 	class MouseMoveEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::MouseMove);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_MouseMove);
 
 		constexpr MouseMoveEvent(float x, float y)
 			: Event{GetStaticType()}, m_X{x}, m_Y{y} {}
@@ -66,7 +66,7 @@ namespace gbc
 	class MouseScrollEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::MouseScroll);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_MouseScroll);
 
 		constexpr MouseScrollEvent(float offsetX, float offsetY)
 			: Event{GetStaticType()}, m_OffsetX{offsetX}, m_OffsetY{offsetY} {}
@@ -85,7 +85,7 @@ namespace gbc
 	class MouseEnterEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType::MouseEnter);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType_MouseEnter);
 
 		constexpr MouseEnterEvent(bool entered)
 			: Event{GetStaticType()}, m_Entered{entered} {}

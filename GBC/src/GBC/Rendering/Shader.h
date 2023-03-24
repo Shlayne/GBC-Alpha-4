@@ -7,7 +7,7 @@
 namespace gbc
 {
 	using ShaderType = uint8_t;
-	enum ShaderType_ : ShaderType
+	enum : ShaderType
 	{
 		ShaderType_None,
 		ShaderType_Vertex,
@@ -35,6 +35,6 @@ namespace gbc
 		static auto CreateRef(const ShaderInfo& info) -> Ref<Shader>;
 		virtual ~Shader() = default;
 	public:
-		virtual auto Bind() -> void = 0;
+		virtual auto Bind() const -> void = 0;
 	};
 }

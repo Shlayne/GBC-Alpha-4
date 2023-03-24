@@ -21,6 +21,7 @@ namespace gbc
 	public:
 		inline virtual auto GetWidth() const -> uint32_t { return m_Width; }
 		inline virtual auto GetHeight() const -> uint32_t { return m_Height; }
+		inline virtual auto GetSize() const -> glm::uvec2 { return {m_Width, m_Height}; }
 	public:
 		virtual auto SetTitle(std::string_view title) -> void override;
 		inline virtual auto GetTitle() const -> std::string override { return m_Title; }

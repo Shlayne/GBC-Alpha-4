@@ -4,12 +4,12 @@
 
 namespace gbc
 {
-	static auto ConvertShaderTypeToOpenGL(ShaderType type) -> GLuint;
+	auto ConvertShaderTypeToOpenGL(ShaderType type) -> GLuint;
 #if GBC_ENABLE_LOGGING
-	static auto ConvertShaderTypeToName(ShaderType type) -> const char*;
+	auto ConvertShaderTypeToName(ShaderType type) -> const char*;
 #endif
-	static auto CompileShaderSource(GLint& success, const ShaderSource& source) -> GLuint;
-	static auto CreateProgram(const std::vector<ShaderSource>& sources) -> GLuint;
+	auto CompileShaderSource(GLint& success, const ShaderSource& source) -> GLuint;
+	auto CreateProgram(const std::vector<ShaderSource>& sources) -> GLuint;
 
 	OpenGLShader::OpenGLShader(const ShaderInfo& info)
 	{
@@ -21,7 +21,7 @@ namespace gbc
 		glDeleteProgram(m_RendererID);
 	}
 
-	auto OpenGLShader::Bind() -> void
+	auto OpenGLShader::Bind() const -> void
 	{
 		glUseProgram(m_RendererID);
 	}
@@ -30,16 +30,16 @@ namespace gbc
 	{
 		switch (type)
 		{
-		break;case ShaderType_Vertex:				  return GL_VERTEX_SHADER;
-		break;case ShaderType_TessellationControl:	  return GL_TESS_CONTROL_SHADER;
-		break;case ShaderType_TessellationEvaluation: return GL_TESS_EVALUATION_SHADER;
-		break;case ShaderType_Geometry:				  return GL_GEOMETRY_SHADER;
-		break;case ShaderType_Fragment:				  return GL_FRAGMENT_SHADER;
-		break;case ShaderType_Compute:				  return GL_COMPUTE_SHADER;
-		break;default:
-			GBC_CORE_ASSERT(false, "Unknown ShaderType.");
-			return 0;
+			case ShaderType_Vertex:                 return GL_VERTEX_SHADER;
+			case ShaderType_TessellationControl:    return GL_TESS_CONTROL_SHADER;
+			case ShaderType_TessellationEvaluation: return GL_TESS_EVALUATION_SHADER;
+			case ShaderType_Geometry:               return GL_GEOMETRY_SHADER;
+			case ShaderType_Fragment:               return GL_FRAGMENT_SHADER;
+			case ShaderType_Compute:                return GL_COMPUTE_SHADER;
 		}
+
+		GBC_CORE_ASSERT(false, "Unknown ShaderType.");
+		return 0;
 	}
 
 #if GBC_ENABLE_LOGGING
@@ -47,16 +47,16 @@ namespace gbc
 	{
 		switch (type)
 		{
-		break;case ShaderType_Vertex:				  return "vertex";
-		break;case ShaderType_TessellationControl:	  return "tessellation control";
-		break;case ShaderType_TessellationEvaluation: return "tessellation evaluation";
-		break;case ShaderType_Geometry:				  return "geometry";
-		break;case ShaderType_Fragment:				  return "fragment";
-		break;case ShaderType_Compute:				  return "compute";
-		break;default:
-			GBC_CORE_ASSERT(false, "Unknown ShaderType.");
-			return nullptr;
+			case ShaderType_Vertex:                 return "vertex";
+			case ShaderType_TessellationControl:    return "tessellation control";
+			case ShaderType_TessellationEvaluation: return "tessellation evaluation";
+			case ShaderType_Geometry:               return "geometry";
+			case ShaderType_Fragment:               return "fragment";
+			case ShaderType_Compute:                return "compute";
 		}
+
+		GBC_CORE_ASSERT(false, "Unknown ShaderType.");
+		return nullptr;
 	}
 #endif
 

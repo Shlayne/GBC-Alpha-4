@@ -5,7 +5,7 @@ namespace gbc
 	constexpr Event::Event(EventType type) noexcept
 		: m_Type{type}
 	{
-
+		GBC_CORE_ASSERT(_EventType_First <= m_Type && m_Type <= _EventType_Last, "Unknown EventType.");
 	}
 
 	constexpr auto Event::GetType() const noexcept -> EventType
@@ -15,17 +15,17 @@ namespace gbc
 
 	constexpr auto Event::IsWindowEvent() const noexcept -> bool
 	{
-		return EventType::_Window_First <= m_Type && m_Type <= EventType::_Window_Last;
+		return _EventType_Window_First <= m_Type && m_Type <= _EventType_Window_Last;
 	}
 
 	constexpr auto Event::IsKeyEvent() const noexcept -> bool
 	{
-		return EventType::_Key_First <= m_Type && m_Type <= EventType::_Key_Last;
+		return _EventType_Key_First <= m_Type && m_Type <= _EventType_Key_Last;
 	}
 
 	constexpr auto Event::IsMouseEvent() const noexcept -> bool
 	{
-		return EventType::_Mouse_First <= m_Type && m_Type <= EventType::_Mouse_Last;
+		return _EventType_Mouse_First <= m_Type && m_Type <= _EventType_Mouse_Last;
 	}
 
 	constexpr auto Event::IsHandled() const noexcept -> bool
