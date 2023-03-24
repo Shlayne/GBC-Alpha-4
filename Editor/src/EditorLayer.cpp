@@ -1,23 +1,31 @@
 #include "EditorLayer.h"
-#include "GBC/Rendering/Shader.h"
+#include "GBC/Rendering/Renderer.h"
 #include <imgui.h>
+#include <glm/gtx/transform.hpp>
 
 namespace gbc
 {
 	auto EditorLayer::OnAttach() -> void
 	{
+		Renderer::Init();
+
 		m_Shader = Shader::CreateRef({{
 			{ShaderType_Vertex, R"(
 				#version 450 core
 
 				layout(location = 0) in vec3 i_Position;
 
+				layout(std140, binding = 0) uniform Camera
+				{
+					mat4 viewProjection;
+				};
+
 				layout(location = 0) out vec3 o_Position;
 
 				void main()
 				{
 					o_Position = i_Position;
-					gl_Position = vec4(i_Position, 1.0);
+					gl_Position = viewProjection * vec4(i_Position, 1.0);
 				}
 			)"},
 			{ShaderType_Fragment, R"(
@@ -63,7 +71,7 @@ namespace gbc
 
 	auto EditorLayer::OnDetach() -> void
 	{
-
+		Renderer::Shutdown();
 	}
 
 	static float time{0.0f};
@@ -82,10 +90,7 @@ namespace gbc
 			if (time <= 0.0f)
 				up = true;
 		}
-	}
 
-	auto EditorLayer::OnImGuiRender() -> void
-	{
 		auto& window{Application::Get().GetWindow()};
 		glm::vec2 mousePos{Input::GetRelativeMousePos(window)};
 		mousePos /= window.GetSize();
@@ -94,12 +99,13 @@ namespace gbc
 		RenderCommand::SetClearColor({mousePos, time, 1.0f});
 		RenderCommand::Clear();
 
-		Renderer::BeginScene();
-		m_Shader->Bind();
-		Renderer::Submit(m_VertexArray);
+		Renderer::BeginScene(glm::inverse(glm::translate(glm::vec3{mousePos.x, 1.0f - mousePos.y, 1.0f})));
+		Renderer::Submit(m_VertexArray, m_Shader);
 		Renderer::EndScene();
+	}
 
-		// NOTE: the window is currently not being cleared, so it looks ew
+	auto EditorLayer::OnImGuiRender() -> void
+	{
 		ImGui::ShowDemoWindow();
 	}
 
