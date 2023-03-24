@@ -14,10 +14,10 @@ namespace gbc
 		virtual auto Bind() const -> void = 0;
 		virtual auto Unbind() const -> void = 0;
 
-		virtual auto AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) -> void = 0;
+		virtual auto SetVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) -> void = 0;
 		virtual auto SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) -> void = 0;
 
-		virtual auto GetVertexBuffers() const -> const std::vector<Ref<VertexBuffer>>& = 0;
+		virtual auto GetVertexBuffer() const -> const Ref<VertexBuffer>& = 0;
 		virtual auto GetIndexBuffer() const -> const Ref<IndexBuffer>& = 0;
 	};
 }

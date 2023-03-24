@@ -26,17 +26,29 @@ namespace gbc
 		glBindVertexArray(0);
 	}
 
-	auto OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) -> void
+	auto OpenGLVertexArray::SetVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) -> void
 	{
 		GBC_CORE_ASSERT(!vertexBuffer->GetLayout().GetElements().empty());
 
 		glBindVertexArray(m_RendererID);
-		vertexBuffer->Bind();
-		m_VertexBuffers.push_back(vertexBuffer);
-
+		
 		auto& layout{vertexBuffer->GetLayout()};
 		auto& elements{layout.GetElements()};
-		for (uint32_t i{0}; i < elements.size(); ++i)
+		auto elementCount{static_cast<uint32_t>(elements.size())};
+
+		// If resetting the vertex buffer, disable all attribs that won't be active with the next one.
+		if (m_VertexBuffer)
+		{
+			auto currentElementCount{static_cast<uint32_t>(m_VertexBuffer->GetLayout().GetElements().size())};
+			for (uint32_t i{elementCount}; i < currentElementCount; ++i)
+				glDisableVertexAttribArray(i);
+		}
+
+		vertexBuffer->Bind();
+		m_VertexBuffer = vertexBuffer;
+
+
+		for (uint32_t i{0}; i < elementCount; ++i)
 		{
 			auto& element{elements[i]};
 			glEnableVertexAttribArray(i);

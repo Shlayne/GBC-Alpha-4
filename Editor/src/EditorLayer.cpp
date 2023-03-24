@@ -56,7 +56,7 @@ namespace gbc
 		vbInfo.data = vertices;
 		vbInfo.size = sizeof(vertices);
 		vbInfo.usage = BufferUsage_StaticDraw;
-		m_VertexArray->AddVertexBuffer(VertexBuffer::CreateRef(vbInfo));
+		m_VertexArray->SetVertexBuffer(VertexBuffer::CreateRef(vbInfo));
 
 		uint8_t indices[] = {
 			0, 1, 2, // triangle 0
