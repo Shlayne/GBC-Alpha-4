@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GBC/Event/Event.h"
+#include <glm/glm.hpp>
 
 namespace gbc
 {
@@ -22,18 +23,18 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowResize);
 
-		constexpr WindowResizeEvent(uint32_t width, uint32_t height)
-			: Event{GetStaticType()}, m_Width{width}, m_Height{height} {}
+		constexpr WindowResizeEvent(glm::ivec2 size)
+			: Event{GetStaticType()}, m_Size{size} {}
 
-		constexpr auto GetWidth() const noexcept -> uint32_t { return m_Width; }
-		constexpr auto GetHeight() const noexcept -> uint32_t { return m_Height; }
+		constexpr auto GetWidth() const noexcept -> int32_t { return m_Size.x; }
+		constexpr auto GetHeight() const noexcept -> int32_t { return m_Size.y; }
+		constexpr auto GetSize() const noexcept -> glm::ivec2 { return m_Size; }
 
 #if GBC_ENABLE_LOGGING
 		virtual std::string ToString() const override;
 #endif
 	private:
-		uint32_t m_Width;
-		uint32_t m_Height;
+		glm::ivec2 m_Size;
 	};
 
 	class WindowFramebufferResizeEvent : public Event
@@ -41,18 +42,18 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowFramebufferResize);
 
-		constexpr WindowFramebufferResizeEvent(uint32_t width, uint32_t height)
-			: Event{GetStaticType()}, m_Width{width}, m_Height{height} {}
+		constexpr WindowFramebufferResizeEvent(glm::ivec2 framebufferSize)
+			: Event{GetStaticType()}, m_FramebufferSize{framebufferSize} {}
 
-		constexpr auto GetFramebufferWidth() const noexcept -> uint32_t { return m_Width; }
-		constexpr auto GetFramebufferHeight() const noexcept -> uint32_t { return m_Height; }
+		constexpr auto GetFramebufferWidth() const noexcept -> int32_t { return m_FramebufferSize.x; }
+		constexpr auto GetFramebufferHeight() const noexcept -> int32_t { return m_FramebufferSize.y; }
+		constexpr auto GetFramebufferSize() const noexcept -> glm::ivec2 { return m_FramebufferSize; }
 
 #if GBC_ENABLE_LOGGING
 		virtual std::string ToString() const override;
 #endif
 	private:
-		uint32_t m_Width;
-		uint32_t m_Height;
+		glm::ivec2 m_FramebufferSize;
 	};
 
 	class WindowMoveEvent : public Event
@@ -60,18 +61,18 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowMove);
 
-		constexpr WindowMoveEvent(int32_t x, int32_t y)
-			: Event{GetStaticType()}, m_X{x}, m_Y{y} {}
+		constexpr WindowMoveEvent(glm::ivec2 windowPos)
+			: Event{GetStaticType()}, m_WindowPos{windowPos} {}
 
-		constexpr auto GetX() const noexcept -> int32_t { return m_X; }
-		constexpr auto GetY() const noexcept -> int32_t { return m_Y; }
+		constexpr auto GetWindowX() const noexcept -> int32_t { return m_WindowPos.x; }
+		constexpr auto GetWindowY() const noexcept -> int32_t { return m_WindowPos.y; }
+		constexpr auto GetWindowPos() const noexcept -> glm::ivec2 { return m_WindowPos; }
 
 #if GBC_ENABLE_LOGGING
 		virtual std::string ToString() const override;
 #endif
 	private:
-		int32_t m_X;
-		int32_t m_Y;
+		glm::ivec2 m_WindowPos;
 	};
 
 	class WindowFocusEvent : public Event
@@ -150,18 +151,18 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType_WindowContentScale);
 
-		constexpr WindowContentScaleEvent(float scaleX, float scaleY)
-			: Event{GetStaticType()}, m_ScaleX{scaleX}, m_ScaleY{scaleY} {}
+		constexpr WindowContentScaleEvent(glm::vec2 contentScale)
+			: Event{GetStaticType()}, m_ContentScale{contentScale} {}
 
-		constexpr auto GetScaleX() const noexcept -> float { return m_ScaleX; }
-		constexpr auto GetScaleY() const noexcept -> float { return m_ScaleY; }
+		constexpr auto GetContentScaleX() const noexcept -> float { return m_ContentScale.x; }
+		constexpr auto GetContentScaleY() const noexcept -> float { return m_ContentScale.y; }
+		constexpr auto GetContentScale() const noexcept -> glm::vec2 { return m_ContentScale; }
 
 #if GBC_ENABLE_LOGGING
 		virtual std::string ToString() const override;
 #endif
 	private:
-		float m_ScaleX;
-		float m_ScaleY;
+		glm::vec2 m_ContentScale;
 	};
 
 	class WindowRefreshEvent : public Event

@@ -44,8 +44,10 @@ namespace gbc
 	public:
 		static inline auto GetType() -> RendererAPIType { return s_Type; }
 	public:
-		virtual auto SetClearColor(const glm::vec4& color) -> void = 0;
+		virtual auto SetClearColor(glm::vec4 color) -> void = 0;
 		virtual auto Clear() -> void = 0;
+
+		virtual auto SetViewport(glm::ivec2 position, glm::ivec2 size) -> void = 0;
 
 		virtual auto DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t offset, uint32_t count, RendererPrimitive primitive) -> void = 0;
 	private:

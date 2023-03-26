@@ -10,55 +10,29 @@ namespace gbc
 		Renderer::Init();
 
 		m_Shader = Shader::CreateRef({{
-			{ShaderType_Vertex, R"(
-				#version 450 core
-
-				layout(location = 0) in vec3 i_Position;
-
-				layout(std140, binding = 0) uniform Camera
-				{
-					mat4 viewProjection;
-				};
-
-				layout(location = 0) out vec3 o_Position;
-
-				void main()
-				{
-					o_Position = i_Position;
-					gl_Position = viewProjection * vec4(i_Position, 1.0);
-				}
-			)"},
-			{ShaderType_Fragment, R"(
-				#version 450 core
-
-				layout(location = 0) in vec3 i_Position;
-
-				layout(location = 0) out vec4 o_Color;
-
-				void main()
-				{
-					o_Color = vec4(i_Position / 2.0 + 0.5, 1.0);
-				}
-			)"},
+			{ShaderType_Vertex, io::ReadFile("Resources/Shaders/Shader.vert.glsl")},
+			{ShaderType_Fragment, io::ReadFile("Resources/Shaders/Shader.frag.glsl")},
 		}});
 
 		m_VertexArray = VertexArray::CreateRef();
 
-		float vertices[] = {
-			-0.5f, -0.5f,  0.0f, // bottom left
-			+0.5f, -0.5f,  0.0f, // bottom right
-			 0.0f, +0.5f,  0.0f, // top center
+		float vertices[]
+		{
+			-0.5f, -0.5f, // bottom left
+			+0.5f, -0.5f, // bottom right
+			 0.0f, +0.5f, // top center
 		};
 		VertexBufferInfo vbInfo;
 		vbInfo.layout = {
-			{ VertexBufferElementType_Float3, "i_Position" }
+			{VertexBufferElementType_Float2, "i_Position"}
 		};
 		vbInfo.data = vertices;
 		vbInfo.size = sizeof(vertices);
 		vbInfo.usage = BufferUsage_StaticDraw;
 		m_VertexArray->SetVertexBuffer(VertexBuffer::CreateRef(vbInfo));
 
-		uint8_t indices[] = {
+		uint8_t indices[]
+		{
 			0, 1, 2, // triangle 0
 		};
 		IndexBufferInfo ibInfo;
@@ -111,6 +85,11 @@ namespace gbc
 
 	auto EditorLayer::OnEvent(Event& event) -> void
 	{
+		event.Dispatch(this, &EditorLayer::OnWindowFramebufferResizeEvent);
+	}
 
+	auto EditorLayer::OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent& event) -> void
+	{
+		RenderCommand::SetViewport({0, 0}, event.GetFramebufferSize());
 	}
 }

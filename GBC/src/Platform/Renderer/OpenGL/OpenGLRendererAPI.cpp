@@ -7,7 +7,7 @@ namespace gbc
 	auto ConvertRendererPrimitiveToOpenGL(RendererPrimitive primitive) -> GLenum;
 	auto ConvertIndexBufferElementTypeToOpenGL(IndexBufferElementType type) -> GLenum;
 
-	auto OpenGLRendererAPI::SetClearColor(const glm::vec4& color) -> void
+	auto OpenGLRendererAPI::SetClearColor(glm::vec4 color) -> void
 	{
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
@@ -16,6 +16,11 @@ namespace gbc
 	{
 		// TODO: specify which buffers are cleared
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	}
+
+	auto OpenGLRendererAPI::SetViewport(glm::ivec2 position, glm::ivec2 size) -> void
+	{
+		glViewport(position.x, position.y, size.x, size.y);
 	}
 
 	auto OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t offset, uint32_t count, RendererPrimitive primitive) -> void

@@ -13,6 +13,8 @@ namespace gbc
 		virtual auto OnImGuiRender() -> void override;
 		virtual auto OnEvent(Event& event) -> void override;
 	private:
+		auto OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent& event) -> void;
+	private:
 		// TODO: move to Renderer2D or something.
 		Ref<Shader> m_Shader;
 		Ref<VertexArray> m_VertexArray;

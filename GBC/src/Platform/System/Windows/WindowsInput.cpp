@@ -5,44 +5,29 @@
 
 namespace gbc
 {
-	static auto GetKeyState(Keycode keycode, Window& window) noexcept -> int
-	{
-		return glfwGetKey(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int>(keycode));
-	}
-
-	static auto GetMouseButtonState(MouseButton button, Window& window) noexcept -> int
-	{
-		return glfwGetMouseButton(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int>(button));
-	}
-
-	static auto GetMousePosition(Window& window, double* x, double* y) noexcept -> void
-	{
-		glfwGetCursorPos(static_cast<GLFWwindow*>(window.GetNativeWindow()), x, y);
-	}
-
-	static auto GetWindowPosition(Window& window, int32_t* x, int32_t* y) noexcept -> void
-	{
-		glfwGetWindowPos(static_cast<GLFWwindow*>(window.GetNativeWindow()), x, y);
-	}
+	auto GetKeyState(Window& window, Keycode keycode) noexcept -> int;
+	auto GetMouseButtonState(Window& window, MouseButton button) noexcept -> int;
+	auto GetMousePosition(Window& window, double* x, double* y) noexcept -> void;
+	auto GetWindowPosition(Window& window, int32_t* x, int32_t* y) noexcept -> void;
 
 	auto Input::IsKeyPressed(Keycode keycode, Window& window) noexcept -> bool
 	{
-		return GetKeyState(keycode, window) != GLFW_RELEASE;
+		return GetKeyState(window, keycode) != GLFW_RELEASE;
 	}
 
 	auto Input::IsKeyReleased(Keycode keycode, Window& window) noexcept -> bool
 	{
-		return GetKeyState(keycode, window) == GLFW_RELEASE;
+		return GetKeyState(window, keycode) == GLFW_RELEASE;
 	}
 
 	auto Input::IsMouseButtonPressed(MouseButton button, Window& window) noexcept -> bool
 	{
-		return GetMouseButtonState(button, window) != GLFW_RELEASE;
+		return GetMouseButtonState(window, button) != GLFW_RELEASE;
 	}
 
 	auto Input::IsMouseButtonReleased(MouseButton button, Window& window) noexcept -> bool
 	{
-		return GetMouseButtonState(button, window) == GLFW_RELEASE;
+		return GetMouseButtonState(window, button) == GLFW_RELEASE;
 	}
 
 	auto Input::GetRelativeMouseX(Window& window) noexcept -> int32_t
@@ -70,14 +55,14 @@ namespace gbc
 	{
 		int32_t windowX{0};
 		GetWindowPosition(Application::Get().GetWindow(), &windowX, nullptr);
-		return static_cast<int32_t>(windowX + GetRelativeMouseX());
+		return windowX + GetRelativeMouseX();
 	}
 
 	auto Input::GetAbsoluteMouseY() noexcept -> int32_t
 	{
 		int32_t windowY{0};
 		GetWindowPosition(Application::Get().GetWindow(), nullptr, &windowY);
-		return static_cast<int32_t>(windowY + GetRelativeMouseY());
+		return windowY + GetRelativeMouseY();
 	}
 
 	auto Input::GetAbsoluteMousePos() noexcept -> glm::ivec2
@@ -88,5 +73,25 @@ namespace gbc
 		GetMousePosition(window, &mousePos.x, &mousePos.y);
 		GetWindowPosition(window, &windowPos.x, &windowPos.y);
 		return windowPos += mousePos;
+	}
+
+	auto GetKeyState(Window& window, Keycode keycode) noexcept -> int
+	{
+		return glfwGetKey(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int>(keycode));
+	}
+
+	auto GetMouseButtonState(Window& window, MouseButton button) noexcept -> int
+	{
+		return glfwGetMouseButton(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int>(button));
+	}
+
+	auto GetMousePosition(Window& window, double* x, double* y) noexcept -> void
+	{
+		glfwGetCursorPos(static_cast<GLFWwindow*>(window.GetNativeWindow()), x, y);
+	}
+
+	auto GetWindowPosition(Window& window, int32_t* x, int32_t* y) noexcept -> void
+	{
+		glfwGetWindowPos(static_cast<GLFWwindow*>(window.GetNativeWindow()), x, y);
 	}
 }

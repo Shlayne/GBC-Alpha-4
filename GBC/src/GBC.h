@@ -14,6 +14,7 @@
 #include "GBC/Core/Timestep.h"
 #include "GBC/Core/Window.h"
 #include "GBC/Event/Events.h"
+#include "GBC/IO/IO.h"
 #include "GBC/Rendering/Buffer.h"
 #include "GBC/Rendering/RenderCommand.h"
 #include "GBC/Rendering/Renderer.h"
