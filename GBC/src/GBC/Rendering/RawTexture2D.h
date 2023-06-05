@@ -44,12 +44,12 @@ namespace gbc
 		inline auto GetPixels() noexcept -> void* { return m_Pixels; }
 		inline auto GetPixels() const noexcept -> const void* { return m_Pixels; }
 	private:
+		auto Allocate() -> size_t;
 		auto Deallocate() const -> void;
 	private:
 		uint32_t m_Width{};
 		uint32_t m_Height{};
 		void* m_Pixels{};
 		TextureFormat m_Format : TextureFormat::BitCount {};
-		bool m_SelfAllocated : 1 {}; // TODO: undermine this by using the same (de)allocators.
 	};
 }

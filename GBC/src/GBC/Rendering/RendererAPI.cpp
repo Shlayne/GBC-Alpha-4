@@ -6,7 +6,7 @@ namespace gbc
 {
 	auto RendererAPI::CreateScope() -> Scope<RendererAPI>
 	{
-		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
+		GBC_CORE_ASSERT_BOUNDED_CLASS_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
 		constexpr Scope<RendererAPI>(*createScopeFuncs[])()
 		{
 			[]() -> Scope<RendererAPI> { return gbc::CreateScope<OpenGLRendererAPI>(); }

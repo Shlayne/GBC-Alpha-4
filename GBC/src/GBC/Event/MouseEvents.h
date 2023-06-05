@@ -3,7 +3,6 @@
 #include "GBC/Event/Event.h"
 #include "GBC/Event/Modifiers.h"
 #include "GBC/Core/MouseButtons.h"
-#include <glm/glm.hpp>
 
 namespace gbc
 {
@@ -22,7 +21,7 @@ namespace gbc
 		virtual std::string ToString() const override;
 #endif
 	private:
-		MouseButton m_Button;
+		MouseButton m_Button : MouseButton::BitCount;
 		Modifiers m_Modifiers;
 	};
 
@@ -41,7 +40,7 @@ namespace gbc
 		virtual std::string ToString() const override;
 #endif
 	private:
-		MouseButton m_Button;
+		MouseButton m_Button : MouseButton::BitCount;
 		Modifiers m_Modifiers;
 	};
 
@@ -50,18 +49,18 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::MouseMove);
 
-		constexpr MouseMoveEvent(glm::vec2 mousePos)
-			: Event{GetStaticType()}, m_MousePos{mousePos} {}
+		constexpr MouseMoveEvent(float mousePosX, float mousePosY)
+			: Event{GetStaticType()}, m_MousePosX{mousePosX}, m_MousePosY{mousePosY} {}
 
-		constexpr auto GetMouseX() const noexcept -> float { return m_MousePos.x; }
-		constexpr auto GetMouseY() const noexcept -> float { return m_MousePos.y; }
-		constexpr auto GetMousePos() const noexcept -> glm::vec2 { return m_MousePos; }
+		constexpr auto GetMouseX() const noexcept -> float { return m_MousePosX; }
+		constexpr auto GetMouseY() const noexcept -> float { return m_MousePosY; }
 
 #if GBC_ENABLE_LOGGING
 		virtual std::string ToString() const override;
 #endif
 	private:
-		glm::vec2 m_MousePos;
+		float m_MousePosX;
+		float m_MousePosY;
 	};
 
 	class MouseScrollEvent : public Event
@@ -69,18 +68,18 @@ namespace gbc
 	public:
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::MouseScroll);
 
-		constexpr MouseScrollEvent(glm::vec2 scrollOffset)
-			: Event{GetStaticType()}, m_ScrollOffset{scrollOffset} {}
+		constexpr MouseScrollEvent(float scrollOffsetX, float scrollOffsetY)
+			: Event{GetStaticType()}, m_ScrollOffsetX{scrollOffsetX}, m_ScrollOffsetY{scrollOffsetY} {}
 
-		constexpr auto GetScrollOffsetX() const noexcept -> float { return m_ScrollOffset.x; }
-		constexpr auto GetScrollOffsetY() const noexcept -> float { return m_ScrollOffset.y; }
-		constexpr auto GetScrollOffset() const noexcept -> glm::vec2 { return m_ScrollOffset; }
+		constexpr auto GetScrollOffsetX() const noexcept -> float { return m_ScrollOffsetX; }
+		constexpr auto GetScrollOffsetY() const noexcept -> float { return m_ScrollOffsetY; }
 
 #if GBC_ENABLE_LOGGING
 		virtual std::string ToString() const override;
 #endif
 	private:
-		glm::vec2 m_ScrollOffset;
+		float m_ScrollOffsetX;
+		float m_ScrollOffsetY;
 	};
 
 	class MouseEnterEvent : public Event
@@ -97,6 +96,6 @@ namespace gbc
 		virtual std::string ToString() const override;
 #endif
 	private:
-		bool m_Entered;
+		bool m_Entered : 1;
 	};
 }

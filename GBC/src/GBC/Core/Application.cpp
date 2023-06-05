@@ -3,7 +3,7 @@
 
 namespace gbc
 {
-	ApplicationCommandLineArgs::ApplicationCommandLineArgs(int argc, char** argv)
+	ApplicationCommandLineArgs::ApplicationCommandLineArgs(int argc, char* argv[])
 		: m_Count{argc}
 		, m_Args{argv}
 	{

@@ -27,6 +27,6 @@ namespace gbc
 		constexpr auto rend()    const noexcept -> std::vector<Layer*>::const_reverse_iterator { return m_Layers.rend();    }
 	private:
 		std::vector<Layer*> m_Layers;
-		size_t m_LayerEndIndex{0};
+		size_t m_LayerEndIndex{};
 	};
 }

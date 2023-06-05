@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>
+#include "GBC/Core/Core.h"
 
 // Taken from glfw3.h and modified
 

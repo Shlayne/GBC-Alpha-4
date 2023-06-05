@@ -21,14 +21,14 @@ namespace gbc
 	std::string MouseMoveEvent::ToString() const
 	{
 		std::stringstream stream;
-		stream << "MouseMoveEvent: mouseX=" << m_MousePos.x << " mouseY=" << m_MousePos.y;
+		stream << "MouseMoveEvent: mouseX=" << m_MousePosX << " mouseY=" << m_MousePosY;
 		return stream.str();
 	}
 
 	std::string MouseScrollEvent::ToString() const
 	{
 		std::stringstream stream;
-		stream << "MouseScrollEvent: scrollOffsetX=" << m_ScrollOffset.x << " scrollOffsetY=" << m_ScrollOffset.y;
+		stream << "MouseScrollEvent: scrollOffsetX=" << m_ScrollOffsetX << " scrollOffsetY=" << m_ScrollOffsetY;
 		return stream.str();
 	}
 

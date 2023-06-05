@@ -20,7 +20,8 @@ namespace gbc
 		{
 			m_Width = info.rawTexture->GetWidth();
 			m_Height = info.rawTexture->GetHeight();
-			m_Format = info.format == TextureFormat::None ? inFormat = info.rawTexture->GetFormat() : info.format;
+			inFormat = info.rawTexture->GetFormat();
+			m_Format = !info.format ? inFormat : info.format;
 			pixels = info.rawTexture->GetPixels();
 		}
 		else

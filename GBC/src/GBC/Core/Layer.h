@@ -5,8 +5,6 @@
 
 namespace gbc
 {
-	class Window;
-
 	class Layer
 	{
 	public:

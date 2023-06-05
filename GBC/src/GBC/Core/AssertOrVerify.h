@@ -24,8 +24,8 @@
 	#define GBC_CORE_ASSERT(condition, ...) GBC_EXPAND(_GBC_ASSERT_OR_VERIFY(Assertion, _CORE_, condition __VA_OPT__(,) __VA_ARGS__))
 	#define GBC_ASSERT(condition, ...) GBC_EXPAND(_GBC_ASSERT_OR_VERIFY(Assertion, _, condition __VA_OPT__(,) __VA_ARGS__))
 #else
-	#define GBC_CORE_ASSERT(condition, ...)
-	#define GBC_ASSERT(condition, ...)
+	#define GBC_CORE_ASSERT(condition, ...) static_cast<void>(0)
+	#define GBC_ASSERT(condition, ...) static_cast<void>(0)
 #endif
 
 #if GBC_ENABLE_VERIFYS

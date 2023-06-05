@@ -5,8 +5,9 @@
 
 namespace gbc
 {
-	auto GetKeyState(Window& window, Keycode keycode) noexcept -> int;
-	auto GetMouseButtonState(Window& window, MouseButton button) noexcept -> int;
+	auto ConvertMouseButtonToGLFW(MouseButton button) noexcept -> int32_t;
+	auto GetKeyState(Window& window, Keycode keycode) noexcept -> int32_t;
+	auto GetMouseButtonState(Window& window, MouseButton button) noexcept -> int32_t;
 	auto GetMousePosition(Window& window, double* x, double* y) noexcept -> void;
 	auto GetWindowPosition(Window& window, int32_t* x, int32_t* y) noexcept -> void;
 
@@ -75,14 +76,20 @@ namespace gbc
 		return windowPos += mousePos;
 	}
 
-	auto GetKeyState(Window& window, Keycode keycode) noexcept -> int
+	auto ConvertMouseButtonToGLFW(MouseButton button) noexcept -> int32_t
 	{
-		return glfwGetKey(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int>(keycode));
+		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(MouseButton, button);
+		return +button - 1;
 	}
 
-	auto GetMouseButtonState(Window& window, MouseButton button) noexcept -> int
+	auto GetKeyState(Window& window, Keycode keycode) noexcept -> int32_t
 	{
-		return glfwGetMouseButton(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int>(button));
+		return glfwGetKey(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int32_t>(keycode));
+	}
+
+	auto GetMouseButtonState(Window& window, MouseButton button) noexcept -> int32_t
+	{
+		return glfwGetMouseButton(static_cast<GLFWwindow*>(window.GetNativeWindow()), ConvertMouseButtonToGLFW(button));
 	}
 
 	auto GetMousePosition(Window& window, double* x, double* y) noexcept -> void

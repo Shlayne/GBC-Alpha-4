@@ -11,7 +11,7 @@ namespace gbc
 		static auto GetCoreLogger() -> Ref<spdlog::logger>&;
 		static auto GetClientLogger() -> Ref<spdlog::logger>&;
 	private:
-		friend auto Main(int argc, char** argv) -> int;
+		friend auto Main(int argc, char* argv[]) -> int;
 		static auto Init() -> void;
 	};
 }

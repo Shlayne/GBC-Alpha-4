@@ -7,7 +7,7 @@ namespace gbc
 {
 	auto Context::CreateScope(const ContextInfo& info) -> Scope<Context>
 	{
-		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
+		GBC_CORE_ASSERT_BOUNDED_CLASS_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
 		constexpr Scope<Context>(*createScopeFuncs[])(const ContextInfo&)
 		{
 			[](const ContextInfo& info) -> Scope<Context> { return gbc::CreateScope<OpenGLContext>(info); }

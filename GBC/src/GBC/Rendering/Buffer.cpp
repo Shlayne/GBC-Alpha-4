@@ -7,7 +7,7 @@ namespace gbc
 {
 	auto VertexBuffer::CreateRef(const VertexBufferInfo& info) -> Ref<VertexBuffer>
 	{
-		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
+		GBC_CORE_ASSERT_BOUNDED_CLASS_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
 		constexpr Ref<VertexBuffer>(*createRefFuncs[])(const VertexBufferInfo&)
 		{
 			[](const VertexBufferInfo& info) -> Ref<VertexBuffer> { return gbc::CreateRef<OpenGLVertexBuffer>(info); }
@@ -17,7 +17,7 @@ namespace gbc
 
 	auto IndexBuffer::CreateRef(const IndexBufferInfo& info) -> Ref<IndexBuffer>
 	{
-		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
+		GBC_CORE_ASSERT_BOUNDED_CLASS_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
 		constexpr Ref<IndexBuffer>(*createRefFuncs[])(const IndexBufferInfo&)
 		{
 			[](const IndexBufferInfo& info) -> Ref<IndexBuffer> { return gbc::CreateRef<OpenGLIndexBuffer>(info); }
@@ -27,7 +27,7 @@ namespace gbc
 
 	auto UniformBuffer::CreateRef(const UniformBufferInfo& info) -> Ref<UniformBuffer>
 	{
-		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
+		GBC_CORE_ASSERT_BOUNDED_CLASS_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
 		constexpr Ref<UniformBuffer>(*createRefFuncs[])(const UniformBufferInfo&)
 		{
 			[](const UniformBufferInfo& info) -> Ref<UniformBuffer> { return gbc::CreateRef<OpenGLUniformBuffer>(info); }

@@ -14,12 +14,12 @@ namespace gbc
 	{
 	public:
 		ApplicationCommandLineArgs() noexcept = default;
-		ApplicationCommandLineArgs(int argc, char** argv);
+		ApplicationCommandLineArgs(int argc, char* argv[]);
 	public:
 		auto operator[](size_t index) const noexcept -> const char*;
 	private:
-		int m_Count{0};
-		char** m_Args{nullptr};
+		int m_Count{};
+		char** m_Args{};
 	};
 
 	struct ApplicationInfo
@@ -52,12 +52,12 @@ namespace gbc
 		ApplicationCommandLineArgs m_CommandLineArgs;
 		std::vector<Scope<Window>> m_Windows;
 		LayerStack m_LayerStack;
-		ImGuiOverlay* m_ImGuiOverlay{nullptr};
+		ImGuiOverlay* m_ImGuiOverlay{};
 
 		// Flags
 		bool m_Running : 1 {true};
 	private:
-		friend auto Main(int argc, char** argv) -> int;
+		friend auto Main(int argc, char* argv[]) -> int;
 		auto Run() -> void;
 	};
 }

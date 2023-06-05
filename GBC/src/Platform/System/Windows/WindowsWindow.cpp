@@ -10,13 +10,15 @@ namespace gbc
 	}
 
 	WindowsWindow::WindowsWindow(const WindowInfo& info)
-		: m_Size{info.width, info.height}
+		: m_Width{info.width}
+		, m_Height{info.height}
+		, m_Title{info.title}
 	{
 		// TODO: profile function
 
 		{
 			// TODO: profile scope
-			m_Handle = glfwCreateWindow(m_Size.x, m_Size.y, info.title.data(), nullptr, nullptr);
+			m_Handle = glfwCreateWindow(m_Width, m_Height, m_Title.c_str(), nullptr, nullptr);
 			GBC_CORE_ASSERT(m_Handle, "Failed to create GLFW window.");
 		}
 
@@ -24,7 +26,6 @@ namespace gbc
 
 		glfwSetWindowUserPointer(m_Handle, this);
 		SetVSync(info.vsync);
-		m_Title = info.title;
 
 		SetWindowCallbacks(m_Handle);
 	}
@@ -109,23 +110,25 @@ namespace gbc
 	auto WindowsWindow::WindowSizeCallback(GLFWwindow* handle, int width, int height) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
-		window.m_Size = {static_cast<int32_t>(width), static_cast<int32_t>(height)};
-		WindowResizeEvent event{window.m_Size};
+		window.m_Width = static_cast<int32_t>(width);
+		window.m_Height = static_cast<int32_t>(height);
+		WindowResizeEvent event{window.m_Width, window.m_Height};
 		window.m_EventCallback(event, &window);
 	}
 
 	auto WindowsWindow::FramebufferSizeCallback(GLFWwindow* handle, int width, int height) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
-		window.m_FramebufferSize = {static_cast<int32_t>(width), static_cast<int32_t>(height)};
-		WindowFramebufferResizeEvent event{window.m_FramebufferSize};
+		window.m_FramebufferWidth = static_cast<int32_t>(width);
+		window.m_FramebufferHeight = static_cast<int32_t>(height);
+		WindowFramebufferResizeEvent event{window.m_FramebufferWidth, window.m_FramebufferHeight};
 		window.m_EventCallback(event, &window);
 	}
 
 	auto WindowsWindow::WindowPosCallback(GLFWwindow* handle, int x, int y) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
-		WindowMoveEvent event{{static_cast<int32_t>(x), static_cast<int32_t>(y)}};
+		WindowMoveEvent event{static_cast<int32_t>(x), static_cast<int32_t>(y)};
 		window.m_EventCallback(event, &window);
 	}
 
@@ -150,7 +153,7 @@ namespace gbc
 		window.m_EventCallback(event, &window);
 	}
 
-	auto WindowsWindow::DropCallback(GLFWwindow* handle, int pathCount, const char** paths) -> void
+	auto WindowsWindow::DropCallback(GLFWwindow* handle, int pathCount, const char* paths[]) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
 		WindowPathDropEvent event{static_cast<uint32_t>(pathCount), paths};
@@ -160,7 +163,7 @@ namespace gbc
 	auto WindowsWindow::WindowContentScaleCallback(GLFWwindow* handle, float scaleX, float scaleY) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
-		WindowContentScaleEvent event{{scaleX, scaleY}};
+		WindowContentScaleEvent event{scaleX, scaleY};
 		window.m_EventCallback(event, &window);
 	}
 
@@ -228,15 +231,14 @@ namespace gbc
 	auto WindowsWindow::CursorPosCallback(GLFWwindow* handle, double x, double y) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
-		MouseMoveEvent event{{static_cast<float>(x), static_cast<float>(y)}};
+		MouseMoveEvent event{static_cast<float>(x), static_cast<float>(y)};
 		window.m_EventCallback(event, &window);
 	}
-
 
 	auto WindowsWindow::ScrollCallback(GLFWwindow* handle, double offsetX, double offsetY) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
-		MouseScrollEvent event{{static_cast<float>(offsetX), static_cast<float>(offsetY)}};
+		MouseScrollEvent event{static_cast<float>(offsetX), static_cast<float>(offsetY)};
 		window.m_EventCallback(event, &window);
 	}
 

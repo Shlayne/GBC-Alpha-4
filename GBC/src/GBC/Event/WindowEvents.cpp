@@ -12,21 +12,21 @@ namespace gbc
 	std::string WindowResizeEvent::ToString() const
 	{
 		std::stringstream stream;
-		stream << "WindowResizeEvent: width=" << m_Size.x << " height=" << m_Size.y;
+		stream << "WindowResizeEvent: width=" << m_Width << " height=" << m_Height;
 		return stream.str();
 	}
 
 	std::string WindowFramebufferResizeEvent::ToString() const
 	{
 		std::stringstream stream;
-		stream << "WindowFramebufferResizeEvent: framebufferWidth=" << m_FramebufferSize.x << " framebufferHeight=" << m_FramebufferSize.y;
+		stream << "WindowFramebufferResizeEvent: framebufferWidth=" << m_FramebufferWidth << " framebufferHeight=" << m_FramebufferHeight;
 		return stream.str();
 	}
 
 	std::string WindowMoveEvent::ToString() const
 	{
 		std::stringstream stream;
-		stream << "WindowMoveEvent: x=" << m_WindowPos.x << " y=" << m_WindowPos.y;
+		stream << "WindowMoveEvent: x=" << m_WindowPosX << " y=" << m_WindowPosY;
 		return stream.str();
 	}
 
@@ -55,7 +55,7 @@ namespace gbc
 	{
 		std::stringstream stream;
 		stream << "WindowPathDropEvent: pathCount=" << m_PathCount << " paths:";
-		for (uint32_t i{0}; i < m_PathCount; ++i)
+		for (uint32_t i{}; i < m_PathCount; ++i)
 			stream << " \"" << m_Paths[i] << '"';
 		return stream.str();
 	}
@@ -63,7 +63,7 @@ namespace gbc
 	std::string WindowContentScaleEvent::ToString() const
 	{
 		std::stringstream stream;
-		stream << "WindowContentScaleEvent: contentScaleX=" << m_ContentScale.x << " contentScaleY=" << m_ContentScale.y;
+		stream << "WindowContentScaleEvent: contentScaleX=" << m_ContentScaleX << " contentScaleY=" << m_ContentScaleY;
 		return stream.str();
 	}
 

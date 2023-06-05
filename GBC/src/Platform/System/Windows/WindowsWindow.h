@@ -19,12 +19,10 @@ namespace gbc
 		virtual auto Close() -> void override;
 		virtual auto ShouldClose() -> bool override;
 	public:
-		inline virtual auto GetWidth() const -> int32_t { return m_Size.x; }
-		inline virtual auto GetHeight() const -> int32_t { return m_Size.y; }
-		inline virtual auto GetSize() const -> glm::ivec2 { return m_Size; }
-		inline virtual auto GetFramebufferWidth() const -> int32_t { return m_FramebufferSize.x; }
-		inline virtual auto GetFramebufferHeight() const -> int32_t { return m_FramebufferSize.y; }
-		inline virtual auto GetFramebufferSize() const -> glm::ivec2 { return m_FramebufferSize; }
+		inline virtual auto GetWidth() const -> uint32_t { return m_Width; }
+		inline virtual auto GetHeight() const -> uint32_t { return m_Height; }
+		inline virtual auto GetFramebufferWidth() const -> uint32_t { return m_FramebufferWidth; }
+		inline virtual auto GetFramebufferHeight() const -> uint32_t { return m_FramebufferHeight; }
 	public:
 		virtual auto SetTitle(std::string_view title) -> void override;
 		inline virtual auto GetTitle() const -> std::string override { return m_Title; }
@@ -43,7 +41,7 @@ namespace gbc
 		static auto WindowFocusCallback(GLFWwindow* handle, int focused) -> void;
 		static auto WindowIconifyCallback(GLFWwindow* handle, int iconified) -> void;
 		static auto WindowMaximizeCallback(GLFWwindow* handle, int maximized) -> void;
-		static auto DropCallback(GLFWwindow* handle, int pathCount, const char** paths) -> void;
+		static auto DropCallback(GLFWwindow* handle, int pathCount, const char* paths[]) -> void;
 		static auto WindowContentScaleCallback(GLFWwindow* handle, float scaleX, float scaleY) -> void;
 		static auto WindowRefreshCallback(GLFWwindow* handle) -> void;
 
@@ -64,8 +62,10 @@ namespace gbc
 		std::string m_Title;
 
 		// State
-		glm::ivec2 m_Size{};
-		glm::ivec2 m_FramebufferSize{};
+		uint32_t m_Width{};
+		uint32_t m_Height{};
+		uint32_t m_FramebufferWidth{};
+		uint32_t m_FramebufferHeight{};
 
 		// Flags
 		bool m_VSync : 1 {};

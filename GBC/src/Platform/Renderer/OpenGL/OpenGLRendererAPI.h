@@ -8,7 +8,7 @@ namespace gbc
 	{
 	public:
 		virtual auto SetClearColor(glm::vec4 color) -> void override;
-		virtual auto Clear() -> void override;
+		virtual auto Clear(ClearBuffer clearBuffer) -> void override;
 
 		virtual auto SetViewport(glm::ivec2 position, glm::ivec2 size) -> void override;
 

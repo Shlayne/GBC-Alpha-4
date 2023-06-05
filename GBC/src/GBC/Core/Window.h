@@ -8,8 +8,8 @@ namespace gbc
 {
 	struct WindowInfo
 	{
-		int32_t width{1280};
-		int32_t height{720};
+		uint32_t width{1280};
+		uint32_t height{720};
 		std::string title{"GBC"};
 
 		// Flags
@@ -22,7 +22,7 @@ namespace gbc
 	class Window
 	{
 	public:
-		static auto CreateScope(const WindowInfo& info = {}) -> Scope<Window>;
+		static auto CreateScope(const WindowInfo& info) -> Scope<Window>;
 		virtual ~Window() = default;
 	public:
 		virtual auto GetNativeWindow() -> void* = 0;
@@ -31,12 +31,10 @@ namespace gbc
 		virtual auto Close() -> void = 0;
 		virtual auto ShouldClose() -> bool = 0;
 	public:
-		virtual auto GetWidth() const -> int32_t = 0;
-		virtual auto GetHeight() const -> int32_t = 0;
-		virtual auto GetSize() const -> glm::ivec2 = 0;
-		virtual auto GetFramebufferWidth() const -> int32_t = 0;
-		virtual auto GetFramebufferHeight() const -> int32_t = 0;
-		virtual auto GetFramebufferSize() const -> glm::ivec2 = 0;
+		virtual auto GetWidth() const -> uint32_t = 0;
+		virtual auto GetHeight() const -> uint32_t = 0;
+		virtual auto GetFramebufferWidth() const -> uint32_t = 0;
+		virtual auto GetFramebufferHeight() const -> uint32_t = 0;
 	public:
 		virtual auto SetTitle(std::string_view title) -> void = 0;
 		virtual auto GetTitle() const -> std::string = 0;

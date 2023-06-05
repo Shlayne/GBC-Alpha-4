@@ -5,7 +5,7 @@ namespace gbc
 {
 	extern auto CreateApplication(ApplicationCommandLineArgs args) -> Application*;
 
-	auto Main(int argc, char** argv) -> int
+	auto Main(int argc, char* argv[]) -> int
 	{
 		Logger::Init();
 
@@ -31,7 +31,7 @@ auto APIENTRY WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hInstPrev, _In_ L
 
 #else // !GBC_CONFIG_DIST
 
-auto main(int argc, char** argv) -> int
+auto main(int argc, char* argv[]) -> int
 {
 	return gbc::Main(argc, argv);
 }

@@ -67,7 +67,7 @@ namespace gbc
 
 		auto& window{Application::Get().GetWindow()};
 		glm::vec2 mousePos{Input::GetRelativeMousePos(window)};
-		mousePos /= window.GetSize();
+		mousePos /= glm::vec2{window.GetWidth(), window.GetHeight()};
 		mousePos = glm::clamp(mousePos, 0.0f, 1.0f);
 
 		RenderCommand::SetClearColor({mousePos, time, 1.0f});
@@ -90,6 +90,6 @@ namespace gbc
 
 	auto EditorLayer::OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent& event) -> void
 	{
-		RenderCommand::SetViewport({0, 0}, event.GetFramebufferSize());
+		RenderCommand::SetViewport({0, 0}, {event.GetFramebufferWidth(), event.GetFramebufferHeight()});
 	}
 }

@@ -7,7 +7,7 @@ namespace gbc
 {
 	auto Shader::CreateRef(const ShaderInfo& info) -> Ref<Shader>
 	{
-		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
+		GBC_CORE_ASSERT_BOUNDED_CLASS_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
 		constexpr Ref<Shader>(*createRefFuncs[])(const ShaderInfo&)
 		{
 			[](const ShaderInfo& info) -> Ref<Shader> { return gbc::CreateRef<OpenGLShader>(info); }

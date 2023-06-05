@@ -7,7 +7,7 @@ namespace gbc
 {
 	auto VertexArray::CreateRef() -> Ref<VertexArray>
 	{
-		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
+		GBC_CORE_ASSERT_BOUNDED_CLASS_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
 		constexpr Ref<VertexArray>(*createRefFuncs[])()
 		{
 			[]() -> Ref<VertexArray> { return gbc::CreateRef<OpenGLVertexArray>(); }
