@@ -1,6 +1,6 @@
 include "Dependencies/premake/Custom/solutionitems.lua"
 
-workspace "GBC-1.4"
+workspace "GBC-Alpha-4"
 	architecture "x86_64"
 	startproject "Editor"
 
