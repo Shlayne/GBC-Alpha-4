@@ -8,33 +8,33 @@ namespace gbc
 	auto GetChannels(TextureFormat format) -> int32_t;
 	auto IsHDR(TextureFormat format) -> bool;
 
-	RawTexture2D::RawTexture2D(uint32_t width, uint32_t height, TextureFormat format)
-		: m_Width{width}
-		, m_Height{height}
-		, m_Format{format}
+	RawTexture2D::RawTexture2D(const RawTexture2DInfo& info)
+		: m_Width{info.width}
+		, m_Height{info.height}
+		, m_Format{info.format}
 	{
-		GBC_CORE_ASSERT(width > 0 && height > 0, "Texture has zero size.");
+		GBC_CORE_ASSERT(m_Width > 0 && m_Height > 0, "Texture has zero size.");
 		size_t size{Allocate()};
 		memset(m_Pixels, 0, size);
 	}
 
 	// TODO: remove when asset system exists
 	RawTexture2D::RawTexture2D(const std::filesystem::path& filepath, TextureFormat format)
+		: m_Format{format}
 	{
 		auto filepathString{filepath.string()};
 		int32_t width, height;
 		void* pixels{};
 
-		if (IsHDR(format))
-			pixels = stbi_loadf(filepathString.c_str(), &width, &height, nullptr, GetChannels(format));
+		if (IsHDR(m_Format))
+			pixels = stbi_loadf(filepathString.c_str(), &width, &height, nullptr, GetChannels(m_Format));
 		else
-			pixels = stbi_load(filepathString.c_str(), &width, &height, nullptr, GetChannels(format));
+			pixels = stbi_load(filepathString.c_str(), &width, &height, nullptr, GetChannels(m_Format));
 		GBC_CORE_ASSERT(pixels, "Failed to load texture from filepath=\"{}\"", filepathString);
 
+		m_Pixels = pixels;
 		m_Width = static_cast<uint32_t>(width);
 		m_Height = static_cast<uint32_t>(height);
-		m_Pixels = pixels;
-		m_Format = format;
 	}
 
 	RawTexture2D::RawTexture2D(const RawTexture2D& texture)
@@ -47,14 +47,14 @@ namespace gbc
 	}
 
 	RawTexture2D::RawTexture2D(RawTexture2D&& texture) noexcept
-		: m_Width{texture.m_Width}
+		: m_Pixels{texture.m_Pixels}
+		, m_Width{texture.m_Width}
 		, m_Height{texture.m_Height}
-		, m_Pixels{texture.m_Pixels}
 		, m_Format{texture.m_Format}
 	{
+		texture.m_Pixels = {};
 		texture.m_Width = {};
 		texture.m_Height = {};
-		texture.m_Pixels = {};
 		texture.m_Format = {};
 	}
 
@@ -80,14 +80,14 @@ namespace gbc
 		{
 			Deallocate();
 
+			m_Pixels = texture.m_Pixels;
 			m_Width = texture.m_Width;
 			m_Height = texture.m_Height;
-			m_Pixels = texture.m_Pixels;
 			m_Format = texture.m_Format;
 
+			texture.m_Pixels = {};
 			texture.m_Width = {};
 			texture.m_Height = {};
-			texture.m_Pixels = {};
 			texture.m_Format = {};
 		}
 		return *this;

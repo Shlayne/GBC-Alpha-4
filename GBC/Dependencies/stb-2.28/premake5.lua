@@ -11,15 +11,15 @@ project "stb"
 	files {
 		"include/stb_image.h",
 		"include/stb_image_write.h",
-		"src/stb.cpp",
+		"src/stb.cpp"
 	}
 
 	includedirs {
-		"include",
+		"include"
 	}
 
 	defines {
-		"_CRT_SECURE_NO_WARNINGS",
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	filter "system:windows"

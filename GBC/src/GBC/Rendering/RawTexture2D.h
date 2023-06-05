@@ -15,19 +15,27 @@ namespace gbc
 		RGBA_32F
 	);
 
+	struct RawTexture2DInfo
+	{
+		uint32_t width{};
+		uint32_t height{};
+		TextureFormat format : TextureFormat::BitCount {};
+	};
+
 	class RawTexture2D
 	{
 	public:
+		static inline auto CreateRef(const RawTexture2DInfo& info) -> Ref<RawTexture2D> { return gbc::CreateRef<RawTexture2D>(info); }
 		static inline auto CreateRef() -> Ref<RawTexture2D> { return gbc::CreateRef<RawTexture2D>(); }
-		static inline auto CreateRef(uint32_t width, uint32_t height, TextureFormat format) -> Ref<RawTexture2D> { return gbc::CreateRef<RawTexture2D>(width, height, format); }
 		static inline auto CreateRef(const RawTexture2D& texture) -> Ref<RawTexture2D> { return gbc::CreateRef<RawTexture2D>(texture); }
 		static inline auto CreateRef(RawTexture2D&& texture) -> Ref<RawTexture2D> { return gbc::CreateRef<RawTexture2D>(std::move(texture)); }
 
 		// TODO: remove when asset system exists
 		static inline auto CreateRef(const std::filesystem::path& filepath, TextureFormat format) -> Ref<RawTexture2D> { return gbc::CreateRef<RawTexture2D>(filepath, format); }
 	public:
+		RawTexture2D(const RawTexture2DInfo& info);
+
 		RawTexture2D() = default;
-		RawTexture2D(uint32_t width, uint32_t height, TextureFormat format);
 		RawTexture2D(const RawTexture2D& texture);
 		RawTexture2D(RawTexture2D&& texture) noexcept;
 
@@ -47,9 +55,9 @@ namespace gbc
 		auto Allocate() -> size_t;
 		auto Deallocate() const -> void;
 	private:
+		void* m_Pixels{};
 		uint32_t m_Width{};
 		uint32_t m_Height{};
-		void* m_Pixels{};
 		TextureFormat m_Format : TextureFormat::BitCount {};
 	};
 }
