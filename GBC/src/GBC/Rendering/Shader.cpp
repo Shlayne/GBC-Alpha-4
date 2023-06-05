@@ -7,12 +7,11 @@ namespace gbc
 {
 	auto Shader::CreateRef(const ShaderInfo& info) -> Ref<Shader>
 	{
-		switch (RendererAPI::GetType())
+		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
+		constexpr Ref<Shader>(*createRefFuncs[])(const ShaderInfo&)
 		{
-			case RendererAPI_OpenGL: return gbc::CreateScope<OpenGLShader>(info);
-		}
-
-		GBC_CORE_ASSERT(false, "Unknown RendererAPI.");
-		return nullptr;
+			[](const ShaderInfo& info) -> Ref<Shader> { return gbc::CreateRef<OpenGLShader>(info); }
+		};
+		return createRefFuncs[RendererAPI::GetType() - RendererAPI::Begin](info);
 	}
 }

@@ -9,7 +9,7 @@ namespace gbc
 	class KeyPressEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType_KeyPress);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType::KeyPress);
 
 		constexpr KeyPressEvent(Keycode keycode, Modifiers modifiers) noexcept
 			: Event{GetStaticType()}, m_Keycode{keycode}, m_Modifiers{modifiers} {}
@@ -28,7 +28,7 @@ namespace gbc
 	class KeyRepeatEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType_KeyRepeat);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType::KeyRepeat);
 
 		constexpr KeyRepeatEvent(Keycode keycode, Modifiers modifiers) noexcept
 			: Event{GetStaticType()}, m_Keycode{keycode}, m_Modifiers{modifiers} {}
@@ -47,7 +47,7 @@ namespace gbc
 	class KeyReleaseEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType_KeyRelease);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType::KeyRelease);
 
 		constexpr KeyReleaseEvent(Keycode keycode, Modifiers modifiers)
 			: Event{GetStaticType()}, m_Keycode{keycode}, m_Modifiers{modifiers} {}
@@ -66,7 +66,7 @@ namespace gbc
 	class KeyCharTypeEvent : public Event
 	{
 	public:
-		_GBC_EVENT_GET_STATIC_TYPE(EventType_KeyCharType);
+		_GBC_EVENT_GET_STATIC_TYPE(EventType::KeyCharType);
 
 		constexpr KeyCharTypeEvent(Codepoint codepoint)
 			: Event{GetStaticType()}, m_Codepoint{codepoint} {}

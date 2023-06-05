@@ -1,7 +1,7 @@
 project "imgui"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++17"
+	cppdialect "C++20"
 	staticruntime "On"
 
 	targetdir ("%{wks.location}/bin/" .. OutputDir .. "/%{prj.name}")
@@ -22,11 +22,17 @@ project "imgui"
 	}
 
 	includedirs {
-		"%{IncludeDir.imgui}"
+		"%{wks.location}/GBC/src",
+
+		"%{IncludeDir.imgui}",
+
+		"%{IncludeDir.spdlog}"
 	}
 
 	filter "system:windows"
 		systemversion "latest"
+		usestdpreproc "On" -- msvc doesn't provide __VA_OPT__ by default; this fixes that.
+		buildoptions "/wd5105" -- This must be here to prevent a warning produced at WinBase.h:9528.
 
 		files {
 			"backends/imgui_impl_opengl3.cpp",
@@ -38,6 +44,7 @@ project "imgui"
 		}
 
 		defines {
+			"GBC_SYSTEM_WINDOWS",
 			"_CRT_SECURE_NO_WARNINGS"
 		}
 
@@ -45,18 +52,22 @@ project "imgui"
 		runtime "Debug"
 		optimize "Off"
 		symbols "On"
+		defines "GBC_CONFIG_PROFILE"
 
 	filter "configurations:Debug"
 		runtime "Debug"
 		optimize "Debug"
 		symbols "Full"
+		defines "GBC_CONFIG_DEBUG"
 
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "On"
 		symbols "On"
+		defines "GBC_CONFIG_RELEASE"
 
 	filter "configurations:Dist"
 		runtime "Release"
 		optimize "Full"
 		symbols "Off"
+		defines "GBC_CONFIG_DIST"

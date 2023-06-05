@@ -1,6 +1,8 @@
 #include "gbcpch.h"
 #include "IO.h"
 
+// TODO: remove this file when asset system exists.
+
 namespace gbc::io
 {
 	auto ReadFile(const std::filesystem::path& filepath) -> std::string

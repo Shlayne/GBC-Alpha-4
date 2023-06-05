@@ -1,7 +1,7 @@
 project "GBC"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++20"
+	cppdialect "C++latest"
 	cdialect "C17"
 	staticruntime "On"
 
@@ -28,20 +28,22 @@ project "GBC"
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.imgui}",
-		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.stb}",
 
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.spdlog}"
 	}
 	
 	-- Add any links dependency libs via their project names here.
 	links {
-		"imgui"
+		"imgui",
+		"stb"
 	}
 
 	filter "system:windows"
 		systemversion "latest"
 		usestdpreproc "On" -- msvc doesn't provide __VA_OPT__ by default; this fixes that.
-		buildoptions "/wd5105" -- Until Microsoft updates Windows 10 to not have terrible code (aka never), this must be here to prevent a warning.
+		buildoptions "/wd5105" -- This must be here to prevent a warning produced at WinBase.h:9528.
 		defines "GBC_SYSTEM_WINDOWS"
 
 		links {

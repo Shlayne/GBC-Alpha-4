@@ -10,8 +10,8 @@ namespace gbc
 		Renderer::Init();
 
 		m_Shader = Shader::CreateRef({{
-			{ShaderType_Vertex, io::ReadFile("Resources/Shaders/Shader.vert.glsl")},
-			{ShaderType_Fragment, io::ReadFile("Resources/Shaders/Shader.frag.glsl")},
+			{ShaderType::Vertex, io::ReadFile("Resources/Shaders/Shader.vert.glsl")},
+			{ShaderType::Fragment, io::ReadFile("Resources/Shaders/Shader.frag.glsl")},
 		}});
 
 		m_VertexArray = VertexArray::CreateRef();
@@ -24,11 +24,11 @@ namespace gbc
 		};
 		VertexBufferInfo vbInfo;
 		vbInfo.layout = {
-			{VertexBufferElementType_Float2, "i_Position"}
+			{VertexBufferElementType::Float2, "i_Position"}
 		};
 		vbInfo.data = vertices;
 		vbInfo.size = sizeof(vertices);
-		vbInfo.usage = BufferUsage_StaticDraw;
+		vbInfo.usage = BufferUsage::StaticDraw;
 		m_VertexArray->SetVertexBuffer(VertexBuffer::CreateRef(vbInfo));
 
 		uint8_t indices[]
@@ -36,10 +36,10 @@ namespace gbc
 			0, 1, 2, // triangle 0
 		};
 		IndexBufferInfo ibInfo;
-		ibInfo.type = IndexBufferElementType_UInt8;
+		ibInfo.type = IndexBufferElementType::UInt8;
 		ibInfo.data = indices;
 		ibInfo.count = sizeof(indices) / sizeof(*indices);
-		ibInfo.usage = BufferUsage_StaticDraw;
+		ibInfo.usage = BufferUsage::StaticDraw;
 		m_VertexArray->SetIndexBuffer(IndexBuffer::CreateRef(ibInfo));
 	}
 
@@ -48,7 +48,7 @@ namespace gbc
 		Renderer::Shutdown();
 	}
 
-	static float time{0.0f};
+	static float time{};
 	static bool up{true};
 	auto EditorLayer::OnUpdate(Timestep timestep) -> void
 	{

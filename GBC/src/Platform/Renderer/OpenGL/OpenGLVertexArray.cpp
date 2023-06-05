@@ -48,7 +48,7 @@ namespace gbc
 		m_VertexBuffer = vertexBuffer;
 
 
-		for (uint32_t i{0}; i < elementCount; ++i)
+		for (uint32_t i{}; i < elementCount; ++i)
 		{
 			auto& element{elements[i]};
 			glEnableVertexAttribArray(i);
@@ -72,26 +72,22 @@ namespace gbc
 
 	auto ConvertVertexBufferElementTypeToOpenGL(VertexBufferElementType type) -> GLenum
 	{
-		switch (type)
+		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(VertexBufferElementType, type);
+		constexpr GLenum types[]
 		{
-			case VertexBufferElementType_Float:  [[fallthrough]];
-			case VertexBufferElementType_Float2: [[fallthrough]];
-			case VertexBufferElementType_Float3: [[fallthrough]];
-			case VertexBufferElementType_Float4:
-				return GL_FLOAT;
-			case VertexBufferElementType_Int:  [[fallthrough]];
-			case VertexBufferElementType_Int2: [[fallthrough]];
-			case VertexBufferElementType_Int3: [[fallthrough]];
-			case VertexBufferElementType_Int4:
-				return GL_INT;
-			case VertexBufferElementType_UInt:  [[fallthrough]];
-			case VertexBufferElementType_UInt2: [[fallthrough]];
-			case VertexBufferElementType_UInt3: [[fallthrough]];
-			case VertexBufferElementType_UInt4:
-				return GL_UNSIGNED_INT;
-		}
-
-		GBC_CORE_ASSERT(false, "Unknown VertexBufferElementType.");
-		return 0;
+			GL_FLOAT,        // VertexBufferElementType::Float
+			GL_FLOAT,        // VertexBufferElementType::Float2
+			GL_FLOAT,        // VertexBufferElementType::Float3
+			GL_FLOAT,        // VertexBufferElementType::Float4
+			GL_INT,          // VertexBufferElementType::Int
+			GL_INT,          // VertexBufferElementType::Int2
+			GL_INT,          // VertexBufferElementType::Int3
+			GL_INT,          // VertexBufferElementType::Int4
+			GL_UNSIGNED_INT, // VertexBufferElementType::UInt
+			GL_UNSIGNED_INT, // VertexBufferElementType::UInt2
+			GL_UNSIGNED_INT, // VertexBufferElementType::UInt3
+			GL_UNSIGNED_INT, // VertexBufferElementType::UInt4
+		};
+		return types[type - VertexBufferElementType::Begin];
 	}
 }

@@ -37,7 +37,7 @@ namespace gbc
 
 	auto System::GetTimestep() -> Timestep
 	{
-		static double lastTime{0.0};
+		static double lastTime{};
 		double currentTime{glfwGetTime()};
 		Timestep timestep{static_cast<float>(currentTime - lastTime)};
 		lastTime = currentTime;

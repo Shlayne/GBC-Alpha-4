@@ -13,6 +13,6 @@ namespace gbc
 	public:
 		virtual auto SwapBuffers() -> void override;
 	private:
-		GLFWwindow* m_Handle;
+		GLFWwindow* m_Handle{};
 	};
 }

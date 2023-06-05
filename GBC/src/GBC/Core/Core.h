@@ -27,3 +27,4 @@
 #include "GBC/Core/Logger.h"
 #include "GBC/Core/AssertOrVerify.h"
 #include "GBC/Core/DebugBreak.h"
+#include "GBC/Core/Enums.h"

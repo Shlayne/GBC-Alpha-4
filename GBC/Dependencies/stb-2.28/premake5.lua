@@ -1,6 +1,7 @@
-project "glad"
+project "stb"
 	kind "StaticLib"
-	language "C"
+	language "C++"
+	cppdialect "C++20"
 	cdialect "C17"
 	staticruntime "On"
 
@@ -8,18 +9,21 @@ project "glad"
 	objdir ("%{wks.location}/bin-int/" .. OutputDir .. "/%{prj.name}")
 
 	files {
-		"include/glad/glad.h",
-		"include/KHR/khrplatform.h",
-		"src/glad.c"
+		"include/stb_image.h",
+		"include/stb_image_write.h",
+		"src/stb.cpp",
 	}
 
 	includedirs {
-		"include"
+		"include",
+	}
+
+	defines {
+		"_CRT_SECURE_NO_WARNINGS",
 	}
 
 	filter "system:windows"
 		systemversion "latest"
-		buildoptions "/wd5105" -- This must be here to prevent a warning produced at WinBase.h:9528.
 
 	filter "configurations:Profile"
 		runtime "Debug"

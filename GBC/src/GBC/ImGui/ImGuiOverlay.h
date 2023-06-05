@@ -17,6 +17,6 @@ namespace gbc
 		auto Begin() -> void;
 		auto End() -> void;
 	private:
-		bool m_BlockingEvents{false};
+		bool m_BlockingEvents{};
 	};
 }

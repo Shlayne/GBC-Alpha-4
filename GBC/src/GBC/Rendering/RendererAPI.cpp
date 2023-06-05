@@ -6,12 +6,11 @@ namespace gbc
 {
 	auto RendererAPI::CreateScope() -> Scope<RendererAPI>
 	{
-		switch (RendererAPI::GetType())
+		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
+		constexpr Scope<RendererAPI>(*createScopeFuncs[])()
 		{
-			case RendererAPI_OpenGL: return gbc::CreateScope<OpenGLRendererAPI>();
-		}
-
-		GBC_CORE_ASSERT(false, "Unknown RendererAPI.");
-		return nullptr;
+			[]() -> Scope<RendererAPI> { return gbc::CreateScope<OpenGLRendererAPI>(); }
+		};
+		return createScopeFuncs[RendererAPI::GetType() - RendererAPI::Begin]();
 	}
 }

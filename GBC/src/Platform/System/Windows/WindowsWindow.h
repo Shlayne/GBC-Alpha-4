@@ -57,18 +57,18 @@ namespace gbc
 		static auto ScrollCallback(GLFWwindow* handle, double offsetX, double offsetY) -> void;
 		static auto CursorEnterCallback(GLFWwindow* handle, int entered) -> void;
 	private:
-		GLFWwindow* m_Handle{nullptr};
+		GLFWwindow* m_Handle{};
 
 		Scope<Context> m_Context;
 		EventCallback m_EventCallback;
 		std::string m_Title;
 
 		// State
-		glm::ivec2 m_Size{0};
-		glm::ivec2 m_FramebufferSize{0};
+		glm::ivec2 m_Size{};
+		glm::ivec2 m_FramebufferSize{};
 
 		// Flags
-		bool m_VSync : 1 {false};
-		bool m_ShouldClose : 1 {false};
+		bool m_VSync : 1 {};
+		bool m_ShouldClose : 1 {};
 	};
 }

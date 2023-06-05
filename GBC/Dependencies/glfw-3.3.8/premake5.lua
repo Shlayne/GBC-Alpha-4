@@ -21,7 +21,7 @@ project "glfw"
 
 	filter "system:windows"
 		systemversion "latest"
-		buildoptions "/wd5105" -- Until Microsoft updates Windows 10 to not have terrible code (aka never), this must be here to prevent a warning.
+		buildoptions "/wd5105" -- This must be here to prevent a warning produced at WinBase.h:9528.
 
 		files {
 			"src/win32_init.c",

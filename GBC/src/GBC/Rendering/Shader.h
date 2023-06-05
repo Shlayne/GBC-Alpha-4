@@ -6,21 +6,20 @@
 
 namespace gbc
 {
-	using ShaderType = uint8_t;
-	enum : ShaderType
-	{
-		ShaderType_None,
-		ShaderType_Vertex,
-		ShaderType_TessellationControl,
-		ShaderType_TessellationEvaluation,
-		ShaderType_Geometry,
-		ShaderType_Fragment,
-		ShaderType_Compute
-	};
+	GBC_DEFINE_BOUNDED_ENUM(
+		ShaderType, uint8_t,
+
+		Vertex,
+		TessellationControl,
+		TessellationEvaluation,
+		Geometry,
+		Fragment,
+		Compute
+	);
 
 	struct ShaderSource
 	{
-		ShaderType type{ShaderType_None};
+		ShaderType type : ShaderType::BitCount {};
 		std::string code;
 	};
 

@@ -20,7 +20,7 @@ namespace gbc
 		ubInfo.binding = 0;
 		ubInfo.data = nullptr;
 		ubInfo.size = sizeof(CameraBuffer);
-		ubInfo.usage = BufferUsage_DynamicDraw;
+		ubInfo.usage = BufferUsage::DynamicDraw;
 		s_RendererData.cameraUniformBuffer = UniformBuffer::CreateRef(ubInfo);
 	}
 

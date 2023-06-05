@@ -28,35 +28,33 @@ namespace gbc
 
 	auto ConvertShaderTypeToOpenGL(ShaderType type) -> GLuint
 	{
-		switch (type)
+		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(ShaderType, type);
+		constexpr GLuint types[]
 		{
-			case ShaderType_Vertex:                 return GL_VERTEX_SHADER;
-			case ShaderType_TessellationControl:    return GL_TESS_CONTROL_SHADER;
-			case ShaderType_TessellationEvaluation: return GL_TESS_EVALUATION_SHADER;
-			case ShaderType_Geometry:               return GL_GEOMETRY_SHADER;
-			case ShaderType_Fragment:               return GL_FRAGMENT_SHADER;
-			case ShaderType_Compute:                return GL_COMPUTE_SHADER;
-		}
-
-		GBC_CORE_ASSERT(false, "Unknown ShaderType.");
-		return 0;
+			GL_VERTEX_SHADER,          // ShaderType::Vertex
+			GL_TESS_CONTROL_SHADER,    // ShaderType::TessellationControl
+			GL_TESS_EVALUATION_SHADER, // ShaderType::TessellationEvaluation
+			GL_GEOMETRY_SHADER,        // ShaderType::Geometry
+			GL_FRAGMENT_SHADER,        // ShaderType::Fragment
+			GL_COMPUTE_SHADER,         // ShaderType::Compute
+		};
+		return types[type - ShaderType::Begin];
 	}
 
 #if GBC_ENABLE_LOGGING
 	auto ConvertShaderTypeToName(ShaderType type) -> const char*
 	{
-		switch (type)
+		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(ShaderType, type);
+		constexpr const char* names[]
 		{
-			case ShaderType_Vertex:                 return "vertex";
-			case ShaderType_TessellationControl:    return "tessellation control";
-			case ShaderType_TessellationEvaluation: return "tessellation evaluation";
-			case ShaderType_Geometry:               return "geometry";
-			case ShaderType_Fragment:               return "fragment";
-			case ShaderType_Compute:                return "compute";
-		}
-
-		GBC_CORE_ASSERT(false, "Unknown ShaderType.");
-		return nullptr;
+			"vertex",                  // ShaderType::Vertex
+			"tessellation control",    // ShaderType::TessellationControl
+			"tessellation evaluation", // ShaderType::TessellationEvaluation
+			"geometry",                // ShaderType::Geometry
+			"fragment",                // ShaderType::Fragment
+			"compute",                 // ShaderType::Compute
+		};
+		return names[type - ShaderType::Begin];
 	}
 #endif
 
@@ -74,7 +72,7 @@ namespace gbc
 		if (success == GL_FALSE)
 		{
 #if GBC_ENABLE_LOGGING
-			GLint length{0};
+			GLint length{};
 			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
 			std::vector<GLchar> infoLog;
 			infoLog.resize(length);
@@ -95,7 +93,7 @@ namespace gbc
 
 		std::vector<GLuint> shaders;
 		shaders.reserve(sources.size());
-		for (auto it = sources.begin(); success != GL_FALSE && it != sources.end(); ++it)
+		for (auto it{sources.begin()}; success != GL_FALSE && it != sources.end(); ++it)
 			glAttachShader(program, shaders.emplace_back(CompileShaderSource(success, *it)));
 
 		if (success != GL_FALSE)
@@ -105,7 +103,7 @@ namespace gbc
 			if (success == GL_FALSE)
 			{
 #if GBC_ENABLE_LOGGING
-				GLint length{0};
+				GLint length{};
 				glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
 				std::vector<GLchar> infoLog;
 				infoLog.resize(length);
@@ -120,7 +118,7 @@ namespace gbc
 				if (success == GL_FALSE)
 				{
 #if GBC_ENABLE_LOGGING
-					GLint length{0};
+					GLint length{};
 					glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
 					std::vector<GLchar> infoLog;
 					infoLog.resize(length);

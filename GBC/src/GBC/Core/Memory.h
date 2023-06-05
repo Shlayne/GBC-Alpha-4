@@ -13,12 +13,6 @@ namespace gbc
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 
-	template<typename T>
-	auto DestroyRef(Ref<T>& ref) noexcept -> void
-	{
-		ref.reset();
-	}
-
 
 
 	template<typename T>

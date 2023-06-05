@@ -12,6 +12,6 @@ namespace gbc
 	public:
 		virtual auto Bind() const -> void override;
 	private:
-		uint32_t m_RendererID{0};
+		uint32_t m_RendererID{};
 	};
 }

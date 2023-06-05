@@ -12,7 +12,7 @@
 		{ \
 			if (!(condition)) \
 			{ \
-				GBC##type##ERROR(#which " (" #condition ") failed at {}:{}", std::filesystem::relative(__FILE__, std::filesystem::current_path().parent_path()).string(), __LINE__); \
+				GBC##type##ERROR(#which " (" #condition ") failed at {}:{}", std::filesystem::path(__FILE__).filename().string(), __LINE__); \
 				__VA_OPT__(GBC##type##ERROR(__VA_ARGS__);) \
 				GBC_DEBUG_BREAK(); \
 			} \

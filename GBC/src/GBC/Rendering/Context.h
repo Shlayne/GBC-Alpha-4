@@ -6,7 +6,7 @@ namespace gbc
 {
 	struct ContextInfo
 	{
-		void* nativeWindow{nullptr};
+		void* nativeWindow{};
 	};
 
 	class Context

@@ -40,35 +40,33 @@ namespace gbc
 
 	auto ConvertRendererPrimitiveToOpenGL(RendererPrimitive primitive) -> GLenum
 	{
-		switch (primitive)
+		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(RendererPrimitive, primitive);
+		constexpr GLenum primitives[]
 		{
-			case RendererPrimitive_Triangles:              return GL_TRIANGLES;
-			case RendererPrimitive_Lines:                  return GL_LINES;
-			case RendererPrimitive_Points:                 return GL_POINTS;
-			case RendererPrimitive_TriangleStrip:          return GL_TRIANGLE_STRIP;
-			case RendererPrimitive_LineStrip:              return GL_LINE_STRIP;
-			case RendererPrimitive_TrianglesAdjacency:     return GL_TRIANGLES_ADJACENCY;
-			case RendererPrimitive_LinesAdjacency:         return GL_LINES_ADJACENCY;
-			case RendererPrimitive_TriangleStripAdjacency: return GL_TRIANGLE_STRIP_ADJACENCY;
-			case RendererPrimitive_LineStripAdjacency:     return GL_LINE_STRIP_ADJACENCY;
-			case RendererPrimitive_TriangleFan:            return GL_TRIANGLE_FAN;
-			case RendererPrimitive_LineLoop:               return GL_LINE_LOOP;
-		}
-
-		GBC_CORE_ASSERT(false, "Unknown RendererPrimitive.");
-		return 0;
+			GL_TRIANGLES,                // RendererPrimitive::Triangles
+			GL_LINES,                    // RendererPrimitive::Lines
+			GL_POINTS,                   // RendererPrimitive::Points
+			GL_TRIANGLE_STRIP,           // RendererPrimitive::TriangleStrip
+			GL_LINE_STRIP,               // RendererPrimitive::LineStrip
+			GL_TRIANGLES_ADJACENCY,      // RendererPrimitive::TrianglesAdjacency
+			GL_LINES_ADJACENCY,          // RendererPrimitive::LinesAdjacency
+			GL_TRIANGLE_STRIP_ADJACENCY, // RendererPrimitive::TriangleStripAdjacency
+			GL_LINE_STRIP_ADJACENCY,     // RendererPrimitive::LineStripAdjacency
+			GL_TRIANGLE_FAN,             // RendererPrimitive::TriangleFan
+			GL_LINE_LOOP,                // RendererPrimitive::LineLoop
+		};
+		return primitives[primitive - RendererPrimitive::Begin];
 	}
 
 	auto ConvertIndexBufferElementTypeToOpenGL(IndexBufferElementType type) -> GLenum
 	{
-		switch (type)
+		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(IndexBufferElementType, type);
+		constexpr GLenum types[]
 		{
-			case IndexBufferElementType_UInt32: return GL_UNSIGNED_INT;
-			case IndexBufferElementType_UInt16: return GL_UNSIGNED_SHORT;
-			case IndexBufferElementType_UInt8:  return GL_UNSIGNED_BYTE;
-		}
-
-		GBC_CORE_ASSERT(false, "Unknown IndexBufferElementType.");
-		return 0;
+			GL_UNSIGNED_INT,   // IndexBufferElementType::UInt32
+			GL_UNSIGNED_SHORT, // IndexBufferElementType::UInt16
+			GL_UNSIGNED_BYTE,  // IndexBufferElementType::UInt8
+		};
+		return types[type - IndexBufferElementType::Begin];
 	}
 }

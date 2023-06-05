@@ -7,12 +7,11 @@ namespace gbc
 {
 	auto VertexArray::CreateRef() -> Ref<VertexArray>
 	{
-		switch (RendererAPI::GetType())
+		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(RendererAPI, RendererAPI::GetType());
+		constexpr Ref<VertexArray>(*createRefFuncs[])()
 		{
-			case RendererAPI_OpenGL: return gbc::CreateScope<OpenGLVertexArray>();
-		}
-
-		GBC_CORE_ASSERT(false, "Unknown RendererAPI.");
-		return nullptr;
+			[]() -> Ref<VertexArray> { return gbc::CreateRef<OpenGLVertexArray>(); }
+		};
+		return createRefFuncs[RendererAPI::GetType() - RendererAPI::Begin]();
 	}
 }

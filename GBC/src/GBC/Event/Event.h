@@ -4,38 +4,34 @@
 
 namespace gbc
 {
-	using EventType = uint8_t;
-	enum : EventType
-	{
-		EventType_None,
+	GBC_DEFINE_BOUNDED_ENUM(
+		EventType, uint8_t,
 
-		EventType_WindowClose,
-		EventType_WindowResize,
-		EventType_WindowMove,
-		EventType_WindowFocus,
-		EventType_WindowMinimize,
-		EventType_WindowMaximize, 
-		EventType_WindowPathDrop,
-		EventType_WindowFramebufferResize,
-		EventType_WindowContentScale,
-		EventType_WindowRefresh,
+		// Window Events
+		WindowClose,
+		WindowResize,
+		WindowMove,
+		WindowFocus,
+		WindowMinimize,
+		WindowMaximize,
+		WindowPathDrop,
+		WindowFramebufferResize,
+		WindowContentScale,
+		WindowRefresh,
 
-		EventType_KeyPress,
-		EventType_KeyRepeat,
-		EventType_KeyRelease,
-		EventType_KeyCharType,
+		// Key Events
+		KeyPress,
+		KeyRepeat,
+		KeyRelease,
+		KeyCharType,
 
-		EventType_MouseButtonPress,
-		EventType_MouseButtonRelease,
-		EventType_MouseMove,
-		EventType_MouseScroll,
-		EventType_MouseEnter,
-
-		_EventType_Window_First = EventType_WindowClose, _EventType_Window_Last = EventType_WindowRefresh,
-		_EventType_Key_First = EventType_KeyPress, _EventType_Key_Last = EventType_KeyCharType,
-		_EventType_Mouse_First = EventType_MouseButtonPress, _EventType_Mouse_Last = EventType_MouseEnter,
-		_EventType_First = _EventType_Window_First, _EventType_Last = _EventType_Mouse_Last,
-	};
+		// Mouse Events
+		MouseButtonPress,
+		MouseButtonRelease,
+		MouseMove,
+		MouseScroll,
+		MouseEnter
+	);
 
 #define _GBC_EVENT_GET_STATIC_TYPE(type) static constexpr auto GetStaticType() noexcept -> EventType { return type; }
 
@@ -71,8 +67,8 @@ namespace gbc
 	private:
 		friend class Application;
 	private:
-		EventType m_Type : 5 {EventType_None};
-		bool m_Handled : 1 {false};
+		EventType m_Type : EventType::BitCount {};
+		bool m_Handled : 1 {};
 	};
 }
 

@@ -32,43 +32,43 @@ namespace gbc
 
 	auto Input::GetRelativeMouseX(Window& window) noexcept -> int32_t
 	{
-		double x{0.0};
+		double x{};
 		GetMousePosition(window, &x, nullptr);
 		return static_cast<int32_t>(x);
 	}
 
 	auto Input::GetRelativeMouseY(Window& window) noexcept -> int32_t
 	{
-		double y{0.0};
+		double y{};
 		GetMousePosition(window, nullptr, &y);
 		return static_cast<int32_t>(y);
 	}
 
 	auto Input::GetRelativeMousePos(Window& window) noexcept -> glm::ivec2
 	{
-		glm::dvec2 mousePos{0.0};
+		glm::dvec2 mousePos{};
 		GetMousePosition(window, &mousePos.x, &mousePos.y);
 		return mousePos;
 	}
 
 	auto Input::GetAbsoluteMouseX() noexcept -> int32_t
 	{
-		int32_t windowX{0};
+		int32_t windowX{};
 		GetWindowPosition(Application::Get().GetWindow(), &windowX, nullptr);
 		return windowX + GetRelativeMouseX();
 	}
 
 	auto Input::GetAbsoluteMouseY() noexcept -> int32_t
 	{
-		int32_t windowY{0};
+		int32_t windowY{};
 		GetWindowPosition(Application::Get().GetWindow(), nullptr, &windowY);
 		return windowY + GetRelativeMouseY();
 	}
 
 	auto Input::GetAbsoluteMousePos() noexcept -> glm::ivec2
 	{
-		glm::dvec2 mousePos{0.0};
-		glm::ivec2 windowPos{0};
+		glm::dvec2 mousePos{};
+		glm::ivec2 windowPos{};
 		Window& window{Application::Get().GetWindow()};
 		GetMousePosition(window, &mousePos.x, &mousePos.y);
 		GetWindowPosition(window, &windowPos.x, &windowPos.y);

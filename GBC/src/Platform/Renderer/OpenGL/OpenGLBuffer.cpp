@@ -34,8 +34,8 @@ namespace gbc
 
 	OpenGLIndexBuffer::OpenGLIndexBuffer(const IndexBufferInfo& info)
 		: m_Count{info.count}
+		, m_ElementSize{GetIndexBufferElementSize(info.type)}
 		, m_Type{info.type}
-		, m_ElementSize{GetIndexBufferElementSize(m_Type)}
 	{
 		glCreateBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
@@ -66,7 +66,7 @@ namespace gbc
 	{
 		glCreateBuffers(1, &m_RendererID);
 		glNamedBufferData(m_RendererID, m_Size, info.data, ConvertBufferUsageToOpenGL(info.usage));
-		glBindBufferBase(GL_UNIFORM_BUFFER, info.binding, m_RendererID);
+		glBindBufferBase(GL_UNIFORM_BUFFER, info.binding, m_RendererID); // TODO: make UniformBuffer have Bind func.
 	}
 
 	OpenGLUniformBuffer::~OpenGLUniformBuffer()
@@ -83,20 +83,19 @@ namespace gbc
 
 	auto ConvertBufferUsageToOpenGL(BufferUsage usage) -> GLenum
 	{
-		switch (usage)
+		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(BufferUsage, usage);
+		constexpr GLenum usages[]
 		{
-			case BufferUsage_StaticDraw:  return GL_STATIC_DRAW;
-			case BufferUsage_StaticRead:  return GL_STATIC_READ;
-			case BufferUsage_StaticCopy:  return GL_STATIC_COPY;
-			case BufferUsage_DynamicDraw: return GL_DYNAMIC_DRAW;
-			case BufferUsage_DynamicRead: return GL_DYNAMIC_READ;
-			case BufferUsage_DynamicCopy: return GL_DYNAMIC_COPY;
-			case BufferUsage_StreamDraw:  return GL_STREAM_DRAW;
-			case BufferUsage_StreamRead:  return GL_STREAM_READ;
-			case BufferUsage_StreamCopy:  return GL_STREAM_COPY;
-		}
-
-		GBC_CORE_ASSERT(false, "Unknown BufferUsage.");
-		return 0;
+			GL_STATIC_DRAW,  // BufferUsage::StaticDraw
+			GL_STATIC_READ,  // BufferUsage::StaticRead
+			GL_STATIC_COPY,  // BufferUsage::StaticCopy
+			GL_DYNAMIC_DRAW, // BufferUsage::DynamicDraw
+			GL_DYNAMIC_READ, // BufferUsage::DynamicRead
+			GL_DYNAMIC_COPY, // BufferUsage::DynamicCopy
+			GL_STREAM_DRAW,  // BufferUsage::StreamDraw
+			GL_STREAM_READ,  // BufferUsage::StreamRead
+			GL_STREAM_COPY,  // BufferUsage::StreamCopy
+		};
+		return usages[usage - BufferUsage::Begin];
 	}
 }
