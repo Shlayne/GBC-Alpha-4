@@ -4,6 +4,7 @@
 #include "GBC/Rendering/Context.h"
 #define GLFW_INCLUDE_NONE
 #include <glfw/glfw3.h>
+#include <glm/glm.hpp>
 
 namespace gbc
 {
@@ -19,17 +20,36 @@ namespace gbc
 		virtual auto Close() -> void override;
 		virtual auto ShouldClose() -> bool override;
 	public:
-		inline virtual auto GetWidth() const -> uint32_t { return m_Width; }
-		inline virtual auto GetHeight() const -> uint32_t { return m_Height; }
+		inline virtual auto GetWidth() const -> uint32_t { return m_Current.size.x; }
+		inline virtual auto GetHeight() const -> uint32_t { return m_Current.size.y; }
 		inline virtual auto GetFramebufferWidth() const -> uint32_t { return m_FramebufferWidth; }
 		inline virtual auto GetFramebufferHeight() const -> uint32_t { return m_FramebufferHeight; }
 	public:
-		virtual auto SetTitle(std::string_view title) -> void override;
-		inline virtual auto GetTitle() const -> std::string override { return m_Title; }
+		inline virtual auto SetTitle(std::string_view title) -> void override { if (m_Title != title) Impl_SetTitle(title); }
+		inline virtual auto GetTitle() const -> std::string_view override { return m_Title; }
 	public:
-		virtual auto SetVSync(bool enabled) -> void override;
+		inline virtual auto SetWindowMode(WindowMode windowMode) -> void override { if (m_WindowMode != windowMode) Impl_SetWindowMode(windowMode); }
+		inline virtual auto GetWindowMode() const -> WindowMode override { return m_WindowMode; }
+	public:
+		inline virtual auto SetVSync(bool enabled) -> void override { if (m_VSync != !!enabled) Impl_SetVSync(!!enabled); }
 		inline virtual auto IsVSync() const -> bool override { return m_VSync; }
 		inline virtual auto ToggleVSync() -> void override { SetVSync(!IsVSync()); }
+	public:
+		inline virtual auto SetResizable(bool enabled) -> void override { if (m_Resizable != !!enabled) Impl_SetResizable(!!enabled); }
+		inline virtual auto IsResizable() const -> bool override { return m_Resizable; }
+		inline virtual auto ToggleResizable() -> void override { SetResizable(!IsResizable()); }
+	public:
+		inline virtual auto SetMouseCaptured(bool enabled) -> void override { if (m_MouseCaptured != !!enabled) Impl_SetMouseCaptured(!!enabled); }
+		inline virtual auto IsMouseCaptured() const -> bool override { return m_MouseCaptured; }
+		inline virtual auto ToggleMouseCaptured() -> void override { SetMouseCaptured(!IsMouseCaptured()); }
+	private:
+		auto Impl_SetTitle(std::string_view title) -> void;
+		auto Impl_SetVSync(bool enabled) -> void;
+		auto Impl_SetResizable(bool enabled) -> void;
+		auto Impl_SetWindowMode(WindowMode windowMode) -> void;
+		auto Impl_SetMouseCaptured(bool enabled) -> void;
+	private:
+		auto GetWindowMonitor(GLFWmonitor*& outMonitor, glm::ivec2& outMonitorPos, glm::uvec2& outMonitorSize) -> void;
 	private:
 		static auto SetWindowCallbacks(GLFWwindow* handle) -> void;
 
@@ -62,13 +82,23 @@ namespace gbc
 		std::string m_Title;
 
 		// State
-		uint32_t m_Width{};
-		uint32_t m_Height{};
 		uint32_t m_FramebufferWidth{};
 		uint32_t m_FramebufferHeight{};
 
+		struct
+		{
+			glm::ivec2 position{0};
+			glm::uvec2 size{0};
+		} m_Current, m_Backup;
+
 		// Flags
-		bool m_VSync : 1 {};
-		bool m_ShouldClose : 1 {};
+		bool m_VSync            : 1 {};
+		bool m_Resizable        : 1 {};
+		bool m_MouseCaptured    : 1 {};
+		bool m_Focused          : 1 {};
+		bool m_Maximized        : 1 {};
+		bool m_Minimized        : 1 {};
+		bool m_ShouldClose      : 1 {};
+		WindowMode m_WindowMode : WindowMode::BitCount {};
 	};
 }

@@ -3,7 +3,7 @@
 #include "GBC/Core/Application.h"
 #include "GBC/Core/Keycodes.h"
 #include "GBC/Core/MouseButtons.h"
-#include "GBC/Event/Modifiers.h"
+#include "GBC/Core/Modifiers.h"
 #include <glm/glm.hpp>
 
 namespace gbc

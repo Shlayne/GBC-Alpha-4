@@ -86,10 +86,32 @@ namespace gbc
 	auto EditorLayer::OnEvent(Event& event) -> void
 	{
 		event.Dispatch(this, &EditorLayer::OnWindowFramebufferResizeEvent);
+		event.Dispatch(this, &EditorLayer::OnKeyPressEvent);
 	}
 
 	auto EditorLayer::OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent& event) -> void
 	{
 		RenderCommand::SetViewport({0, 0}, {event.GetFramebufferWidth(), event.GetFramebufferHeight()});
+	}
+
+	auto EditorLayer::OnKeyPressEvent(KeyPressEvent& event) -> void
+	{
+		// TODO: this would be set via a graphic settings button.
+		if (event.GetKeycode() == Keycode::F11)
+		{
+			auto& window{Application::Get().GetWindow()};
+			switch (window.GetWindowMode())
+			{
+			case WindowMode::Windowed:
+				window.SetWindowMode(WindowMode::Fullscreen);
+				break;
+			case WindowMode::Fullscreen:
+				window.SetWindowMode(WindowMode::BorderlessWindowed);
+				break;
+			case WindowMode::BorderlessWindowed:
+				window.SetWindowMode(WindowMode::Windowed);
+				break;
+			}
+		}
 	}
 }

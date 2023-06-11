@@ -1,11 +1,11 @@
 #include "gbcpch.h"
 #include "GBC/Core/Input.h"
+#include "WindowsConversions.h"
 #define GLFW_INCLUDE_NONE
 #include <glfw/glfw3.h>
 
 namespace gbc
 {
-	auto ConvertMouseButtonToGLFW(MouseButton button) noexcept -> int32_t;
 	auto GetKeyState(Window& window, Keycode keycode) noexcept -> int32_t;
 	auto GetMouseButtonState(Window& window, MouseButton button) noexcept -> int32_t;
 	auto GetMousePosition(Window& window, double* x, double* y) noexcept -> void;
@@ -76,15 +76,9 @@ namespace gbc
 		return windowPos += mousePos;
 	}
 
-	auto ConvertMouseButtonToGLFW(MouseButton button) noexcept -> int32_t
-	{
-		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(MouseButton, button);
-		return +button - 1;
-	}
-
 	auto GetKeyState(Window& window, Keycode keycode) noexcept -> int32_t
 	{
-		return glfwGetKey(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int32_t>(keycode));
+		return glfwGetKey(static_cast<GLFWwindow*>(window.GetNativeWindow()), ConvertKeycodeToGLFW(keycode));
 	}
 
 	auto GetMouseButtonState(Window& window, MouseButton button) noexcept -> int32_t

@@ -1,6 +1,10 @@
 #include "gbcpch.h"
 #include "WindowsWindow.h"
 #include "GBC/Event/Events.h"
+#include "WindowsConversions.h"
+#if GBC_CONFIG_DEBUG
+	#include "GBC/Rendering/RendererAPI.h"
+#endif
 
 namespace gbc
 {
@@ -10,23 +14,90 @@ namespace gbc
 	}
 
 	WindowsWindow::WindowsWindow(const WindowInfo& info)
-		: m_Width{info.width}
-		, m_Height{info.height}
-		, m_Title{info.title}
+		: m_Title{info.title}
+		, m_VSync{!!info.vsync}
+		, m_Resizable{!!info.resizable}
+		, m_MouseCaptured{!!info.mouseCaptured}
+		, m_Focused{!!info.focused}
+		, m_Maximized{!!info.maximized}
+		, m_WindowMode{info.windowMode}
 	{
 		// TODO: profile function
 
+		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(WindowMode, m_WindowMode);
+
+		// Set appropriate window hints.
+		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+		glfwWindowHint(GLFW_RESIZABLE, m_Resizable);
+		glfwWindowHint(GLFW_FOCUS_ON_SHOW, m_Focused);
+		glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_TRUE);
+#if GBC_CONFIG_DEBUG
+		if (RendererAPI::GetType() == RendererAPI::OpenGL)
+			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
+
+		// TODO: save which monitor the window was on last time it ran to a file.
+		// Maybe this save file is a part of a profile, and people can have many.
+		// Use that monitor if it exists, otherwise, use the primary monitor.
+		GLFWmonitor* defaultMonitor{glfwGetPrimaryMonitor()};
+		GLFWmonitor* fullscreenMonitor{};
+		const GLFWvidmode* vidmode{};
+
+		switch (m_WindowMode)
+		{
+		case WindowMode::Windowed:
+			m_Current.size.x = info.width;
+			m_Current.size.y = info.height;
+			break;
+		case WindowMode::Fullscreen:
+			fullscreenMonitor = defaultMonitor;
+			// Using [[fallthrough]] makes this not compile, but intellisense warns if it's not used.
+		case WindowMode::BorderlessWindowed:
+			m_Backup.size.x = info.width;
+			m_Backup.size.y = info.height;
+			vidmode = glfwGetVideoMode(defaultMonitor);
+			m_Current.size.x = vidmode->width;
+			m_Current.size.y = vidmode->height;
+			break;
+		}
+
+		// Actually create the window.
 		{
 			// TODO: profile scope
-			m_Handle = glfwCreateWindow(m_Width, m_Height, m_Title.c_str(), nullptr, nullptr);
+			m_Handle = glfwCreateWindow(m_Current.size.x, m_Current.size.y, m_Title.c_str(), fullscreenMonitor, nullptr);
 			GBC_CORE_ASSERT(m_Handle, "Failed to create GLFW window.");
 		}
 
+		int32_t left, top, right, bottom;
+		glfwGetMonitorWorkarea(defaultMonitor, &left, &top, &right, &bottom);
+		glm::ivec2 monitorWorkArea{right - left, bottom - top};
+		glfwGetWindowFrameSize(m_Handle, &left, &top, &right, &bottom);
+		// Windows 10 always returns left = top = bottom = 8 for bordered windows (it should be 1)
+		glm::ivec2 windowFrameSize{right + left, bottom + top - 7};
+		glm::ivec2 windowPosition{glm::ivec2{left, top} + (monitorWorkArea - (glm::ivec2{m_Current.size} + windowFrameSize)) / 2};
+
+		if (m_WindowMode == WindowMode::Windowed)
+			m_Current.position = windowPosition;
+		else
+			m_Backup.position = windowPosition;
+
+		glfwSetWindowPos(m_Handle, m_Current.position.x, m_Current.position.y);
+		glfwSetInputMode(m_Handle, GLFW_LOCK_KEY_MODS, GLFW_TRUE);
+		glfwSetWindowUserPointer(m_Handle, this);
+
 		m_Context = Context::CreateScope({m_Handle});
 
-		glfwSetWindowUserPointer(m_Handle, this);
-		SetVSync(info.vsync);
+		Impl_SetVSync(m_VSync);
+		Impl_SetMouseCaptured(m_MouseCaptured);
 
+		if (m_Maximized)
+		{
+			glfwMaximizeWindow(m_Handle);
+			glfwGetWindowSize(m_Handle, reinterpret_cast<int32_t*>(&m_Current.size.x), reinterpret_cast<int32_t*>(&m_Current.size.y));
+			glfwGetWindowPos(m_Handle, &m_Current.position.x, &m_Current.position.y);
+		}
+
+		glfwShowWindow(m_Handle);
 		SetWindowCallbacks(m_Handle);
 	}
 
@@ -56,16 +127,95 @@ namespace gbc
 		return m_ShouldClose || glfwWindowShouldClose(m_Handle);
 	}
 
-	auto WindowsWindow::SetTitle(std::string_view title) -> void
+	auto WindowsWindow::Impl_SetTitle(std::string_view title) -> void
 	{
-		m_Title = title;
 		glfwSetWindowTitle(m_Handle, title.data());
+		m_Title = title;
 	}
 
-	auto WindowsWindow::SetVSync(bool enabled) -> void
+	auto WindowsWindow::Impl_SetVSync(bool enabled) -> void
 	{
-		if (m_VSync != enabled)
-			glfwSwapInterval(!!(m_VSync = enabled));
+		glfwSwapInterval(enabled);
+		m_VSync = enabled;
+	}
+
+	auto WindowsWindow::Impl_SetResizable(bool enabled) -> void
+	{
+		glfwSetWindowAttrib(m_Handle, GLFW_RESIZABLE, enabled);
+		m_Resizable = enabled;
+	}
+
+	auto WindowsWindow::Impl_SetWindowMode(WindowMode windowMode) -> void
+	{
+		GBC_CORE_ASSERT_BOUNDED_ENUM_IS_VALID(WindowMode, windowMode);
+
+		bool decorated{};
+		GLFWmonitor* monitor{};
+		glm::ivec2 windowPos{0};
+		glm::uvec2 windowSize{0};
+
+		switch (windowMode)
+		{
+		case WindowMode::Windowed:
+			windowPos = m_Backup.position;
+			windowSize = m_Backup.size;
+			decorated = true;
+			break;
+		case WindowMode::Fullscreen:
+			if (m_WindowMode == WindowMode::Windowed)
+				m_Backup = m_Current;
+			GetWindowMonitor(monitor, windowPos, windowSize);
+			break;
+		case WindowMode::BorderlessWindowed:
+			if (m_WindowMode == WindowMode::Windowed)
+				m_Backup = m_Current;
+			GetWindowMonitor(monitor, windowPos, windowSize);
+			monitor = nullptr;
+			break;
+		}
+
+		glfwSetWindowAttrib(m_Handle, GLFW_DECORATED, decorated);
+		glfwSetWindowMonitor(m_Handle, monitor, windowPos.x, windowPos.y, windowSize.x, windowSize.y, GLFW_DONT_CARE);
+		m_Current.position = windowPos;
+		m_Current.size = windowSize;
+
+		m_WindowMode = windowMode;
+	}
+
+	auto WindowsWindow::Impl_SetMouseCaptured(bool enabled) -> void
+	{
+		glfwSetInputMode(m_Handle, GLFW_CURSOR, enabled ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+		m_MouseCaptured = enabled;
+	}
+
+	auto WindowsWindow::GetWindowMonitor(GLFWmonitor*& outMonitor, glm::ivec2& outMonitorPos, glm::uvec2& outMonitorSize) -> void
+	{
+		// From: https://stackoverflow.com/questions/21421074/how-to-create-a-full-screen-window-on-the-current-monitor-with-glfw
+		// Get the monitor that most of the window is on. There is a Windows function for this, but it's not exposed via glfw :/
+		int32_t largestOverlap{INT_MIN};
+
+		int32_t monitorCount;
+		GLFWmonitor** monitors{glfwGetMonitors(&monitorCount)};
+
+		for (int32_t i{}; i < monitorCount; i++)
+		{
+			const GLFWvidmode* videoMode{glfwGetVideoMode(monitors[i])};
+
+			int32_t monitorX, monitorY;
+			glfwGetMonitorPos(monitors[i], &monitorX, &monitorY);
+
+			int32_t overlapX{std::max(0, std::min(m_Current.position.x + static_cast<int32_t>(m_Current.size.x), monitorX + videoMode->width) - std::max(m_Current.position.x, monitorX))};
+			int32_t overlapY{std::max(0, std::min(m_Current.position.y + static_cast<int32_t>(m_Current.size.y), monitorY + videoMode->height) - std::max(m_Current.position.y, monitorY))};
+			int32_t overlap{overlapX * overlapY};
+
+			if (overlap > largestOverlap)
+			{
+				largestOverlap = overlap;
+				outMonitor = monitors[i];
+				outMonitorPos = {monitorX, monitorY};
+				outMonitorSize = {static_cast<uint32_t>(videoMode->width), static_cast<uint32_t>(videoMode->height)};
+			}
+		}
 	}
 
 	auto WindowsWindow::SetWindowCallbacks(GLFWwindow* handle) -> void
@@ -110,17 +260,16 @@ namespace gbc
 	auto WindowsWindow::WindowSizeCallback(GLFWwindow* handle, int width, int height) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
-		window.m_Width = static_cast<int32_t>(width);
-		window.m_Height = static_cast<int32_t>(height);
-		WindowResizeEvent event{window.m_Width, window.m_Height};
+		window.m_Current.size = {static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
+		WindowResizeEvent event{window.m_Current.size.x, window.m_Current.size.y};
 		window.m_EventCallback(event, &window);
 	}
 
 	auto WindowsWindow::FramebufferSizeCallback(GLFWwindow* handle, int width, int height) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
-		window.m_FramebufferWidth = static_cast<int32_t>(width);
-		window.m_FramebufferHeight = static_cast<int32_t>(height);
+		window.m_FramebufferWidth = static_cast<uint32_t>(width);
+		window.m_FramebufferHeight = static_cast<uint32_t>(height);
 		WindowFramebufferResizeEvent event{window.m_FramebufferWidth, window.m_FramebufferHeight};
 		window.m_EventCallback(event, &window);
 	}
@@ -128,28 +277,32 @@ namespace gbc
 	auto WindowsWindow::WindowPosCallback(GLFWwindow* handle, int x, int y) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
-		WindowMoveEvent event{static_cast<int32_t>(x), static_cast<int32_t>(y)};
+		window.m_Current.position = {static_cast<uint32_t>(x), static_cast<uint32_t>(y)};
+		WindowMoveEvent event{window.m_Current.position.x, window.m_Current.position.y};
 		window.m_EventCallback(event, &window);
 	}
 
 	auto WindowsWindow::WindowFocusCallback(GLFWwindow* handle, int focused) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
-		WindowFocusEvent event{focused == GLFW_TRUE};
+		window.m_Focused = focused == GLFW_TRUE;
+		WindowFocusEvent event{window.m_Focused};
 		window.m_EventCallback(event, &window);
 	}
 
 	auto WindowsWindow::WindowIconifyCallback(GLFWwindow* handle, int iconified) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
-		WindowMinimizeEvent event{iconified == GLFW_TRUE};
+		window.m_Minimized = iconified == GLFW_TRUE;
+		WindowMinimizeEvent event{window.m_Minimized};
 		window.m_EventCallback(event, &window);
 	}
 
 	auto WindowsWindow::WindowMaximizeCallback(GLFWwindow* handle, int maximized) -> void
 	{
 		WindowsWindow& window{*static_cast<WindowsWindow*>(glfwGetWindowUserPointer(handle))};
-		WindowMaximizeEvent event{maximized == GLFW_TRUE};
+		window.m_Maximized = maximized == GLFW_TRUE;
+		WindowMaximizeEvent event{window.m_Maximized};
 		window.m_EventCallback(event, &window);
 	}
 
@@ -184,17 +337,17 @@ namespace gbc
 		{
 			break;case GLFW_PRESS:
 			{
-				KeyPressEvent event{static_cast<Keycode>(key), static_cast<Modifiers>(mods)};
+				KeyPressEvent event{UnconvertKeycodeFromGLFW(key), UnconvertModifiersFromGLFW(mods)};
 				window.m_EventCallback(event, &window);
 			}
 			break;case GLFW_REPEAT:
 			{
-				KeyRepeatEvent event{static_cast<Keycode>(key), static_cast<Modifiers>(mods)};
+				KeyRepeatEvent event{UnconvertKeycodeFromGLFW(key), UnconvertModifiersFromGLFW(mods)};
 				window.m_EventCallback(event, &window);
 			}
 			break;case GLFW_RELEASE:
 			{
-				KeyReleaseEvent event{static_cast<Keycode>(key), static_cast<Modifiers>(mods)};
+				KeyReleaseEvent event{UnconvertKeycodeFromGLFW(key), UnconvertModifiersFromGLFW(mods)};
 				window.m_EventCallback(event, &window);
 			}
 		}
@@ -217,12 +370,12 @@ namespace gbc
 		{
 			break;case GLFW_PRESS:
 			{
-				MouseButtonPressEvent event{static_cast<MouseButton>(button), static_cast<Modifiers>(mods)};
+				MouseButtonPressEvent event{UnconvertMouseButtonFromGLFW(button), UnconvertModifiersFromGLFW(mods)};
 				window.m_EventCallback(event, &window);
 			}
 			break;case GLFW_RELEASE:
 			{
-				MouseButtonReleaseEvent event{static_cast<MouseButton>(button), static_cast<Modifiers>(mods)};
+				MouseButtonReleaseEvent event{UnconvertMouseButtonFromGLFW(button), UnconvertModifiersFromGLFW(mods)};
 				window.m_EventCallback(event, &window);
 			}
 		}

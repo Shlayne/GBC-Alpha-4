@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GBC/Event/Event.h"
-#include "GBC/Event/Modifiers.h"
+#include "GBC/Core/Modifiers.h"
 #include "GBC/Core/Keycodes.h"
 
 namespace gbc
