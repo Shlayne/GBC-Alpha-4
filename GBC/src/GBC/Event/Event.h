@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GBC/Core/Core.h"
+#include <functional>
 
 namespace gbc
 {
@@ -70,6 +71,9 @@ namespace gbc
 		EventType m_Type : EventType::BitCount {};
 		bool m_Handled : 1 {};
 	};
+
+	class Window;
+	using EventCallback = std::function<auto(Event&, Window*) -> void>;
 }
 
 #include "Event.inl"

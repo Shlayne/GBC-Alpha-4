@@ -49,21 +49,9 @@ namespace gbc
 	}
 
 	static float time{};
-	static bool up{true};
 	auto EditorLayer::OnUpdate(Timestep timestep) -> void
 	{
-		if (up)
-		{
-			time += timestep;
-			if (time >= 1.0f)
-				up = false;
-		}
-		else
-		{
-			time -= timestep;
-			if (time <= 0.0f)
-				up = true;
-		}
+		time = std::fmod(time + timestep, 1.0f);
 
 		auto& window{Application::Get().GetWindow()};
 		glm::vec2 mousePos{Input::GetRelativeMousePos(window)};

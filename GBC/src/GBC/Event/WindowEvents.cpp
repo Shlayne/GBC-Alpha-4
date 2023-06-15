@@ -54,9 +54,10 @@ namespace gbc
 	std::string WindowPathDropEvent::ToString() const
 	{
 		std::stringstream stream;
-		stream << "WindowPathDropEvent: pathCount=" << m_PathCount << " paths:";
-		for (uint32_t i{}; i < m_PathCount; ++i)
-			stream << " \"" << m_Paths[i] << '"';
+		stream << "WindowPathDropEvent: pathCount=" << m_Paths.size() << " paths=[";
+		for (auto& path : m_Paths)
+			stream << " \"" << path << '"';
+		stream << ']';
 		return stream.str();
 	}
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "GBC/Event/Event.h"
+#include <vector>
+#include <string>
 
 namespace gbc
 {
@@ -131,17 +133,20 @@ namespace gbc
 		_GBC_EVENT_GET_STATIC_TYPE(EventType::WindowPathDrop);
 
 		constexpr WindowPathDropEvent(uint32_t pathCount, const char** paths)
-			: Event{GetStaticType()}, m_PathCount{pathCount}, m_Paths{paths} {}
+			: Event{GetStaticType()}
+		{
+			for (uint32_t i{}; i < pathCount; ++i)
+				m_Paths.emplace_back(paths[i]);
+		}
 
-		constexpr auto GetPathCount() const noexcept -> uint32_t { return m_PathCount; }
-		constexpr auto GetPaths() const noexcept -> const char* const* { return m_Paths; }
+		constexpr auto GetPathCount() const noexcept -> size_t { return m_Paths.size(); }
+		constexpr auto GetPaths() const noexcept -> const std::vector<std::string>& { return m_Paths; }
 
 #if GBC_ENABLE_LOGGING
 		virtual std::string ToString() const override;
 #endif
 	private:
-		uint32_t m_PathCount;
-		const char** m_Paths;
+		std::vector<std::string> m_Paths;
 	};
 	
 

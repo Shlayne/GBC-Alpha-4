@@ -3,18 +3,6 @@
 
 namespace gbc
 {
-	ApplicationCommandLineArgs::ApplicationCommandLineArgs(int argc, char* argv[])
-		: m_Count{argc}
-		, m_Args{argv}
-	{
-
-	}
-
-	auto ApplicationCommandLineArgs::operator[](size_t index) const noexcept -> const char*
-	{
-		return m_Args[index];
-	}
-
 	Application* s_ApplicationInstance = nullptr;
 
 	Application::Application(const ApplicationInfo& info)
@@ -24,7 +12,7 @@ namespace gbc
 		s_ApplicationInstance = this;
 
 		System::Init();
-
+		m_EventThread.SetEventCallback(GBC_BIND_CLASS_FUNC(OnEvent));
 		OpenWindow(info.primaryWindowInfo);
 
 		m_ImGuiOverlay = new ImGuiOverlay{};
@@ -64,7 +52,7 @@ namespace gbc
 	auto Application::OpenWindow(const WindowInfo& info) -> Window&
 	{
 		Window& window{*m_Windows.emplace_back(Window::CreateScope(info))};
-		window.SetEventCallback(GBC_BIND_FUNC(OnEvent));
+		window.SetEventCallback(GBC_BIND_MEMBER_FUNC(m_EventThread, EnqueueEvent));
 		return window;
 	}
 
@@ -96,8 +84,6 @@ namespace gbc
 
 	auto Application::OnEvent(Event& event, Window* window) -> void
 	{
-		GBC_CORE_ASSERT(window, "window == nullptr");
-
 		for (auto it{m_LayerStack.rbegin()}; !event.IsHandled() && it != m_LayerStack.rend(); ++it)
 		{
 			Layer* layer{*it};
@@ -106,6 +92,7 @@ namespace gbc
 		}
 
 		event.Dispatch(this, &Application::OnWindowCloseEvent, window);
+		// TODO: dont render on minimized windows.
 	}
 
 	auto Application::OnWindowCloseEvent(WindowCloseEvent& event, Window* window) -> void
@@ -141,7 +128,6 @@ namespace gbc
 				for (auto& window : m_Windows)
 					window->SwapBuffers();
 
-				// Poll events.
 				System::PollEvents();
 
 				// Remove all windows that should close.

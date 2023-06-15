@@ -21,7 +21,8 @@
 #define GBC_EXPAND(x) x
 #define _GBC_STRINGIFY(x) #x
 #define GBC_STRINGIFY(x) GBC_EXPAND(_GBC_STRINGIFY(x))
-#define GBC_BIND_FUNC(func) [this](auto&&... args) -> decltype(auto) { return this->func(std::forward<decltype(args)>(args)...); }
+#define GBC_BIND_CLASS_FUNC(func) [this](auto&&... args) -> decltype(auto) { return this->func(std::forward<decltype(args)>(args)...); }
+#define GBC_BIND_MEMBER_FUNC(member, func) [&](auto&&... args) -> decltype(auto) { return (member).func(std::forward<decltype(args)>(args)...); }
 
 #include "GBC/Core/Memory.h"
 #include "GBC/Core/Logger.h"

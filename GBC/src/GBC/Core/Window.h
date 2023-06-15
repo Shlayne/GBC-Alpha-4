@@ -2,7 +2,6 @@
 
 #include "GBC/Event/Event.h"
 #include <glm/glm.hpp>
-#include <functional>
 
 namespace gbc
 {
@@ -29,42 +28,43 @@ namespace gbc
 		WindowMode windowMode : WindowMode::BitCount {WindowMode::Windowed};
 	};
 
-	class Window;
-	using EventCallback = std::function<auto(Event&, Window*) -> void>;
-
 	class Window
 	{
 	public:
-		static auto CreateScope(const WindowInfo& info) -> Scope<Window>;
-		virtual ~Window() = default;
+		static inline auto CreateScope(const WindowInfo& info) -> Scope<Window> { return gbc::CreateScope<Window>(info); }
+		Window(const WindowInfo& info);
+		~Window();
 	public:
-		virtual auto GetNativeWindow() -> void* = 0;
-		virtual auto SetEventCallback(const EventCallback& callback) -> void = 0;
-		virtual auto SwapBuffers() -> void = 0;
-		virtual auto Close() -> void = 0;
-		virtual auto ShouldClose() -> bool = 0;
+		auto GetNativeWindow() -> void*;
+		auto SetEventCallback(const EventCallback& callback) -> void;
+		auto SwapBuffers() -> void;
+		auto Close() -> void;
+		auto ShouldClose() -> bool;
 	public:
-		virtual auto GetWidth() const -> uint32_t = 0;
-		virtual auto GetHeight() const -> uint32_t = 0;
-		virtual auto GetFramebufferWidth() const -> uint32_t = 0;
-		virtual auto GetFramebufferHeight() const -> uint32_t = 0;
+		auto GetWidth() const -> uint32_t;
+		auto GetHeight() const -> uint32_t;
+		auto GetFramebufferWidth() const -> uint32_t;
+		auto GetFramebufferHeight() const -> uint32_t;
 	public:
-		virtual auto SetTitle(std::string_view title) -> void = 0;
-		virtual auto GetTitle() const -> std::string_view = 0;
+		auto SetTitle(std::string_view title) -> void;
+		auto GetTitle() const -> std::string_view;
 	public:
-		virtual auto SetWindowMode(WindowMode windowMode) -> void = 0;
-		virtual auto GetWindowMode() const -> WindowMode = 0;
+		auto SetWindowMode(WindowMode windowMode) -> void;
+		auto GetWindowMode() const -> WindowMode;
 	public:
-		virtual auto SetVSync(bool enabled) -> void = 0;
-		virtual auto IsVSync() const -> bool = 0;
-		virtual auto ToggleVSync() -> void = 0;
+		auto SetVSync(bool enabled) -> void;
+		auto IsVSync() const -> bool;
+		auto ToggleVSync() -> void;
 	public:
-		virtual auto SetResizable(bool enabled) -> void = 0;
-		virtual auto IsResizable() const -> bool = 0;
-		virtual auto ToggleResizable() -> void = 0;
+		auto SetResizable(bool enabled) -> void;
+		auto IsResizable() const -> bool;
+		auto ToggleResizable() -> void;
 	public:
-		virtual auto SetMouseCaptured(bool enabled) -> void = 0;
-		virtual auto IsMouseCaptured() const -> bool = 0;
-		virtual auto ToggleMouseCaptured() -> void = 0;
+		auto SetMouseCaptured(bool enabled) -> void;
+		auto IsMouseCaptured() const -> bool;
+		auto ToggleMouseCaptured() -> void;
+	private:
+		struct Data;
+		Data* m_Data{}; // Implementation without vtable overhead.
 	};
 }

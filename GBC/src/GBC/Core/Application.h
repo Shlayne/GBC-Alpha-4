@@ -5,6 +5,7 @@
 #include "GBC/Core/System.h"
 #include "GBC/Core/Window.h"
 #include "GBC/Event/Events.h"
+#include "GBC/Event/EventThread.h"
 #include "GBC/ImGui/ImGuiOverlay.h"
 #include <vector>
 
@@ -13,10 +14,10 @@ namespace gbc
 	class ApplicationCommandLineArgs
 	{
 	public:
-		ApplicationCommandLineArgs() noexcept = default;
-		ApplicationCommandLineArgs(int argc, char* argv[]);
+		constexpr ApplicationCommandLineArgs() noexcept = default;
+		constexpr ApplicationCommandLineArgs(int argc, char* argv[]) : m_Count{argc} , m_Args{argv} {}
 	public:
-		auto operator[](size_t index) const noexcept -> const char*;
+		constexpr auto operator[](size_t index) const noexcept -> const char* { return m_Args[index]; }
 	private:
 		int m_Count{};
 		char** m_Args{};
@@ -53,6 +54,7 @@ namespace gbc
 		std::vector<Scope<Window>> m_Windows;
 		LayerStack m_LayerStack;
 		ImGuiOverlay* m_ImGuiOverlay{};
+		EventThread m_EventThread;
 
 		// Flags
 		bool m_Running : 1 {true};
